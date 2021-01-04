@@ -1,38 +1,82 @@
 {
   "project_info": {
-    "project_number": "1094752681725",
-    "firebase_url": "https://kibunya-app.firebaseio.com",
-    "project_id": "kibunya-app",
-    "storage_bucket": "kibunya-app.appspot.com"
+    "project_number": "430972627615",
+    "firebase_url": "https://kibunya-dev.firebaseio.com",
+    "project_id": "kibunya-dev",
+    "storage_bucket": "kibunya-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1094752681725:android:1692facee844d3ddf50894",
+        "mobilesdk_app_id": "1:430972627615:android:46469990f5f461970850aa",
         "android_client_info": {
           "package_name": "com.sekky.kibunya"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1094752681725-3qfh85sirm5nrqf4rgf17ekqo5larpp4.apps.googleusercontent.com",
+          "client_id": "430972627615-994l72j151j5gnuuuakad5v85ouqhuck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sekky.kibunya",
+            "certificate_hash": "bbb877e3e279309b362820f4bdf4071e2605f1fc"
+          }
+        },
+        {
+          "client_id": "430972627615-clek9f6bthe5lsipjofpsfqrp0clpko9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC4Din2EiBL_XqG76p080tBs14h3CxCJbI"
+          "current_key": "AIzaSyBXT2SHeJcgcMNjkzhoz4DD090hqNJZmDE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1094752681725-3qfh85sirm5nrqf4rgf17ekqo5larpp4.apps.googleusercontent.com",
+              "client_id": "430972627615-clek9f6bthe5lsipjofpsfqrp0clpko9.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1094752681725-m467jihopcpjijsvh8nnv51pvgsm97ko.apps.googleusercontent.com",
+              "client_id": "430972627615-9fnkthoptq2t93s49sjeolfc0okn3dq1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sekky-company.kibunya"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430972627615:android:ec469726e5a9b3ff0850aa",
+        "android_client_info": {
+          "package_name": "sekky_company.kibunya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430972627615-clek9f6bthe5lsipjofpsfqrp0clpko9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXT2SHeJcgcMNjkzhoz4DD090hqNJZmDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430972627615-clek9f6bthe5lsipjofpsfqrp0clpko9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "430972627615-9fnkthoptq2t93s49sjeolfc0okn3dq1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "sekky-company.kibunya"
