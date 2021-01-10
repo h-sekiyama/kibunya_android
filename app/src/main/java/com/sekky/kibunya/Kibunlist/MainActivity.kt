@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 今日の日付を表示
+        binding.todayText.setText(Functions.getTodayString())
         init()
     }
 

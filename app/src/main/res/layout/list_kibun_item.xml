@@ -9,41 +9,77 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/kibun_item_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="2dp"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:layout_height="104dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{kibuns.text}"
-            android:textSize="18sp"
-            tools:text="チャット本文" />
+        <LinearLayout
+            android:id="@+id/kibun_item_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="@{kibuns.name}"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="mtzack"
-            tools:ignore="RtlHardcoded" />
+            <ImageView
+                android:id="@+id/kibun_icon"
+                android:layout_width="80dp"
+                android:layout_height="68dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text='@{kibuns.date.toString()}'
-            android:textSize="12sp"
-            tools:text="2017-11-07 12:10:100"
-            tools:ignore="RtlHardcoded" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:text="@{kibuns.text}"
+                    android:textSize="16sp"
+                    tools:text="チャット本文"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/noimage" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:text="@{kibuns.name}"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="mtzack"
+                        tools:ignore="RtlHardcoded"
+                        android:layout_weight="1"
+                        android:gravity="left|center" />
+
+                    <TextView
+                        android:id="@+id/kibun_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:textSize="12sp"
+                        tools:text="13:54"
+                        tools:ignore="RtlHardcoded"
+                        android:layout_weight="1"
+                        android:gravity="right|center"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/border" />
     </LinearLayout>
 
 </layout>

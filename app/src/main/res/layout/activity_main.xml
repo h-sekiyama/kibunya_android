@@ -9,15 +9,87 @@
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.mtzack.chat.MainActivity">
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/kibuns_list"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/headerBackground"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/left_button"
+                android:layout_width="23dp"
+                android:layout_height="36dp"
+                android:background="@drawable/arrow_l_off"
+                android:layout_gravity="left|center"
+                tools:ignore="RtlHardcoded"
+                android:layout_marginStart="20dp"/>
+            <TextView
+                android:id="@+id/today_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                tools:text="2020/09/09(月)"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:textColor="@color/text"
+                android:layout_weight="1"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/calendar_button"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/calendar_icon" />-->
+            <ImageView
+                android:id="@+id/right_button"
+                android:layout_width="23dp"
+                android:layout_height="36dp"
+                android:background="@drawable/arrow_r_off"
+                android:layout_gravity="right|center"
+                tools:ignore="RtlHardcoded"
+                android:layout_marginEnd="20dp"/>
+        </LinearLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true" />
-    </RelativeLayout>
+            android:background="@color/backGround"
+            tools:context="com.mtzack.chat.MainActivity"
+            android:layout_marginBottom="90dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kibuns_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="124dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="-120dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:src="@drawable/tab1_on"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="126dp"
+                android:src="@drawable/tab2_off"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:src="@drawable/tab3_off"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </layout>
