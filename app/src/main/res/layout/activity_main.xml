@@ -70,30 +70,7 @@
         </RelativeLayout>
 
         <!-- タブ -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="124dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="-120dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:src="@drawable/tab1_on"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="126dp"
-                android:src="@drawable/tab2_off"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:src="@drawable/tab3_off"
-                android:layout_weight="1"
-                android:layout_gravity="bottom"/>
-        </LinearLayout>
+        <include layout="@layout/tab_layout" android:id="@+id/tab_layout" />
 
     </LinearLayout>
 </layout>

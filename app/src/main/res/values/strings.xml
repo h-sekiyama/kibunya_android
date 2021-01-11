@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">kibunya</string>
+    <string name="input_label">今日の日記</string>
+    <string name="kibun_label0">さいこう！</string>
+    <string name="kibun_label1">いいね〜</string>
+    <string name="kibun_label2">まあまあ</string>
+    <string name="kibun_label3">う〜ん</string>
+    <string name="kibun_label4">さいあく…</string>
+    <string name="send_kibun_text_label">これでおくる</string>
 </resources>

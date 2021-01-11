@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
+import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.tab_layout.view.*
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
@@ -53,6 +55,17 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             })
+        }
+
+        // タブボタン処理
+        binding.tabLayout.tab_button0.setImageResource(R.drawable.tab0_on)
+        binding.tabLayout.tab_button0.setOnClickListener {
+            val intent = Intent(this@MainActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tabLayout.tab_button1.setOnClickListener {
+            val intent = Intent(this@MainActivity, KibunInputActivity::class.java)
+            startActivity(intent)
         }
     }
 }
