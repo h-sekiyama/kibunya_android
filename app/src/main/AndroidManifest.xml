@@ -13,9 +13,12 @@
         <activity android:name=".Kibunlist.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".KibunDetail.KibunDetailActivity"
+            android:label="kibun_detail">
         </activity>
 
     </application>

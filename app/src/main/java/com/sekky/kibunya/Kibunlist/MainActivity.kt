@@ -1,21 +1,21 @@
 package com.sekky.kibunya.Kibunlist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
+import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
     }
@@ -41,8 +41,16 @@ class MainActivity : AppCompatActivity() {
                 adapter.addItems(results)
             }
             adapter.setOnItemClickListener(object: KibunsAdapter.OnItemClickListener {
-                override fun onClick(view: View, item: Kibuns) {
-                    Toast.makeText(applicationContext, item.name, Toast.LENGTH_LONG).show()
+                override fun onClick(view: View, data: Kibuns) {
+                    val intent = Intent(this@MainActivity, KibunDetailActivity::class.java).apply {
+                        putExtra("text", data.text)
+                        putExtra("date", binding.todayText.text)
+                        putExtra("name", data.name)
+                        putExtra("kibun", data.kibun)
+                        putExtra("time", Functions.getTimeString(data.time))
+                        putExtra("image", data.image)
+                    }
+                    startActivity(intent)
                 }
             })
         }

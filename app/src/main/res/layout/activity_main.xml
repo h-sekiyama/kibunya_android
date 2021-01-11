@@ -19,7 +19,8 @@
             android:layout_height="60dp"
             android:background="@color/headerBackground"
             android:orientation="horizontal">
-            <ImageView
+            <!-- 1日戻すボタン -->
+            <Button
                 android:id="@+id/left_button"
                 android:layout_width="23dp"
                 android:layout_height="36dp"
@@ -27,6 +28,7 @@
                 android:layout_gravity="left|center"
                 tools:ignore="RtlHardcoded"
                 android:layout_marginStart="20dp"/>
+            <!-- 日付 -->
             <TextView
                 android:id="@+id/today_text"
                 android:layout_width="0dp"
@@ -42,7 +44,8 @@
 <!--                android:layout_height="30dp"-->
 <!--                android:layout_gravity="center"-->
 <!--                android:background="@drawable/calendar_icon" />-->
-            <ImageView
+            <!-- １日進むボタン -->
+            <Button
                 android:id="@+id/right_button"
                 android:layout_width="23dp"
                 android:layout_height="36dp"
@@ -66,6 +69,7 @@
                 android:layout_alignParentTop="true" />
         </RelativeLayout>
 
+        <!-- タブ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="124dp"

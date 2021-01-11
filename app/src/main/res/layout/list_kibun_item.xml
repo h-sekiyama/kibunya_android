@@ -20,16 +20,19 @@
             android:orientation="horizontal"
             android:padding="12dp">
 
+            <!-- 気分アイコン -->
             <ImageView
                 android:id="@+id/kibun_icon"
                 android:layout_width="80dp"
-                android:layout_height="68dp" />
+                android:layout_height="68dp"
+                android:layout_marginEnd="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <!-- 日記本文 -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
@@ -44,10 +47,12 @@
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
+                    <!-- ユーザーアイコン -->
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@drawable/noimage" />
+                    <!-- ユーザー名 -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -59,7 +64,7 @@
                         tools:ignore="RtlHardcoded"
                         android:layout_weight="1"
                         android:gravity="left|center" />
-
+                    <!-- 投稿日時 -->
                     <TextView
                         android:id="@+id/kibun_time"
                         android:layout_width="match_parent"
