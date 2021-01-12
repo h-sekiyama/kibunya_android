@@ -7,4 +7,5 @@
     <string name="kibun_label3">う〜ん</string>
     <string name="kibun_label4">さいあく…</string>
     <string name="send_kibun_text_label">これでおくる</string>
+    <string name="send_kibun_complete">今日の気分を送信しました！</string>
 </resources>

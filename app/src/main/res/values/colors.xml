@@ -11,4 +11,5 @@
     <color name="text">#70434A</color>
     <color name="button_disabled">#E5CCCA</color>
     <color name="button_enabled">#70434A</color>
+    <color name="red">#FF0000</color>
 </resources>

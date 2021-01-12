@@ -140,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/text_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="300"
@@ -154,6 +155,7 @@
                     android:layout_height="200dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
+                    android:padding="10dp"
                     android:inputType="textMultiLine"
                     android:background="@drawable/round_border" />
             </LinearLayout>
@@ -163,16 +165,26 @@
                 android:layout_width="140dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center"
-                android:layout_margin="20dp"
+                android:layout_margin="12dp"
                 android:src="@drawable/diary_image_icon" />
             <!-- 日記投稿ボタン -->
             <Button
+                android:id="@+id/kibun_send_button"
                 android:layout_width="200dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="@string/send_kibun_text_label"
-                android:background="@drawable/shape_rounded_corners_30dp" />
+                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
+            <TextView
+                android:id="@+id/send_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_kibun_complete"
+                android:textColor="@color/text"
+                android:layout_marginTop="2dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- タブ -->

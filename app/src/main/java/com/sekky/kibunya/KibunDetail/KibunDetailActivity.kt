@@ -8,12 +8,17 @@ import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunDetailBinding
+import com.sekky.kibunya.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
 
 class KibunDetailActivity: AppCompatActivity() {
+
+    private val binding: ActivityKibunDetailBinding by lazy {
+        DataBindingUtil.setContentView<ActivityKibunDetailBinding>(this, R.layout.activity_kibun_detail)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ActivityKibunDetailBinding>(this, R.layout.activity_kibun_detail)
 
         val intent: Intent = getIntent()
         val text: String? = intent.getStringExtra("text")
