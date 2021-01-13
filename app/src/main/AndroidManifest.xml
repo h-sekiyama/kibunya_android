@@ -17,6 +17,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Login.SendEmailActivity"
+            android:label="send_email_activity">
+        </activity>
+        <activity
+            android:name=".Login.EmailLoginActivity"
+            android:label="email_login_activity">
+        </activity>
+        <activity
+            android:name=".Login.ForgotPasswordActivity"
+            android:label="forgot_password_activity">
+        </activity>
+        <activity
             android:name=".Kibunlist.MainActivity"
             android:label="main_activity">
         </activity>

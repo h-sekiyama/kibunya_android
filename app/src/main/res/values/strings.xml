@@ -13,4 +13,10 @@
     <string name="register_label">登録する</string>
     <string name="authentication_label">認証する</string>
     <string name="to_mail_login_label"><u>Eメールログイン画面へ</u></string>
+    <string name="email_login_title">Eメールアドレスでログイン</string>
+    <string name="login_label">ログイン</string>
+    <string name="forgot_password_label">パスワードを忘れた方</string>
+    <string name="to_registration_label">新規登録画面へ</string>
+    <string name="reset_password_title">パスワードリセット</string>
+    <string name="send_mail_label">メールを送る</string>
 </resources>
