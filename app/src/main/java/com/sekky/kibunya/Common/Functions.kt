@@ -1,7 +1,11 @@
 package com.sekky.kibunya.Common
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
@@ -40,6 +44,27 @@ class Functions {
                 Calendar.SATURDAY -> weekDay = "土"
             }
             return df.format(date) + "(${weekDay})"
+        }
+        // 背景がタッチされた際にフォーカスを移す処理
+        @SuppressLint("ClickableViewAccessibility")
+        fun addBackgroundFocus(v: View) {
+            v.setOnTouchListener { view, event ->
+                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                    /* Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す */
+                    view.requestFocus()
+                }
+                view?.onTouchEvent(event) ?: true
+            }
+        }
+        // キーボードを隠す処理
+        fun addKeyboardHide(context: Context, v: View) {
+            v.setOnFocusChangeListener { view, hasFocus ->
+                if (!hasFocus) {
+                    /* 入力欄からフォーカスが外れたタイミングでキーボードを閉じる */
+                    val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                }
+            }
         }
     }
 }

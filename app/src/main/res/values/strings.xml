@@ -8,4 +8,9 @@
     <string name="kibun_label4">さいあく…</string>
     <string name="send_kibun_text_label">これでおくる</string>
     <string name="send_kibun_complete">今日の気分を送信しました！</string>
+    <string name="sign_up_by_mail_title">メールアドレスで登録</string>
+    <string name="sign_up_by_tel_title">電話番号で登録 or ログイン</string>
+    <string name="register_label">登録する</string>
+    <string name="authentication_label">認証する</string>
+    <string name="to_mail_login_label"><u>Eメールログイン画面へ</u></string>
 </resources>
