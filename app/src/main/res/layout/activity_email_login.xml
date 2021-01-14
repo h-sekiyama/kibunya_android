@@ -50,7 +50,7 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:text="@string/login_label"
-            android:enabled="false"
+            android:clickable="false"
             android:background="@drawable/shape_rounded_corners_disabled_30dp" />
         <TextView
             android:id="@+id/to_password_forgot"

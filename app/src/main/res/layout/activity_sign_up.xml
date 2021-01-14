@@ -73,7 +73,7 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:text="@string/register_label"
-            android:enabled="false"
+            android:clickable="false"
             android:background="@drawable/shape_rounded_corners_disabled_30dp" />
         <View
             android:layout_width="match_parent"
@@ -123,7 +123,7 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:text="@string/authentication_label"
-            android:enabled="false"
+            android:clickable="false"
             android:background="@drawable/shape_rounded_corners_disabled_30dp" />
         <TextView
             android:id="@+id/to_mail_login"

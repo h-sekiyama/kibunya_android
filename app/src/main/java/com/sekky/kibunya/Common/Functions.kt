@@ -71,5 +71,18 @@ class Functions {
                 }
             }
         }
+        // 英語のエラーメッセージを元に日本語メッセージを返す
+        fun getJapaneseErrorMessage(message: String): String {
+            if (message.contains("email address is badly")) {
+                return "不正なメールアドレスです"
+            } else if (message.contains("given password is invalid")) {
+                return "パスワードが脆弱すぎます"
+            } else if (message.contains("email address is already in use")) {
+                return "このメールアドレスは既に使われています"
+            } else if (message.contains("The password is invalid")) {
+                return "パスワードが違います"
+            }
+            return "エラーです"
+        }
     }
 }
