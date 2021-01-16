@@ -4,18 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityEmailLoginBinding
-import com.sekky.kibunya.databinding.ActivitySignUpBinding
 
 class EmailLoginActivity: AppCompatActivity() {
 
@@ -69,17 +65,15 @@ class EmailLoginActivity: AppCompatActivity() {
             user!!.reload()
             auth.signInWithEmailAndPassword(emailText, passText)
                 .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful && user.isEmailVerified) {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                    if (task.isSuccessful) {
+                        if (user.isEmailVerified) {
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Functions.showAlertOneButton(this, "エラー", "メール認証が完了していません")
+                        }
                     } else {
-                        AlertDialog.Builder(this)
-                            .setTitle("エラー")
-                            .setMessage(Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
-                            .setPositiveButton("OK") { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .show()
+                        Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                     }
                 }
         }

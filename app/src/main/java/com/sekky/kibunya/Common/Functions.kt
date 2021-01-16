@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
@@ -81,8 +82,22 @@ class Functions {
                 return "このメールアドレスは既に使われています"
             } else if (message.contains("The password is invalid")) {
                 return "パスワードが違います"
+            } else if (message.contains("The sms verification code used to create")) {
+                return "認証コードが違います"
+            } else if (message.contains("There is no user record")) {
+                return "ユーザーが見つかりません"
             }
-            return "エラーです"
+            return message
+        }
+        // アラートダイアログ（ボタン一つ）表示処理
+        fun showAlertOneButton(context: Context, titleString: String, mainString: String) {
+            AlertDialog.Builder(context)
+                .setTitle(titleString)
+                .setMessage(mainString)
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 }

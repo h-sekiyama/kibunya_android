@@ -4,19 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityForgotPasswordBinding
 
 class ForgotPasswordActivity: AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding: ActivityForgotPasswordBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_forgot_password)
+
+        auth = FirebaseAuth.getInstance()
 
         // 背景タップでキーボードを隠すための処理
         Functions.addBackgroundFocus(binding.background)
@@ -35,6 +42,18 @@ class ForgotPasswordActivity: AppCompatActivity() {
                 updateMailRegistorButtonEnable(binding)
             }
         })
+
+        // パスワードリセットメール送信処理
+        binding.sendMail.setOnClickListener {
+            auth.sendPasswordResetEmail(binding.mailInput.text.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        binding.sendCompletePasswordResetMail.visibility = View.VISIBLE
+                    } else {
+                        Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
+                    }
+                }
+        }
 
         // メールログイン画面への遷移処理
         binding.toMailLogin.setOnClickListener {

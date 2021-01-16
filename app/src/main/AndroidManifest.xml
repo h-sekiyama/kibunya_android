@@ -29,6 +29,10 @@
             android:label="forgot_password_activity">
         </activity>
         <activity
+            android:name=".Login.SmsSendCompleteActivity"
+            android:label="sms_send_complete">
+        </activity>
+        <activity
             android:name=".Kibunlist.MainActivity"
             android:label="main_activity">
         </activity>

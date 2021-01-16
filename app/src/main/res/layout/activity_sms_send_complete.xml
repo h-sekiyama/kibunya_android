@@ -14,12 +14,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:text="@string/reset_password_title"
+            android:layout_margin="40dp"
+            android:text="@string/sms_send_complete_label"
             android:textColor="@color/text"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
         <EditText
-            android:id="@+id/mail_input"
+            android:id="@+id/credential_code_input"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
@@ -27,35 +27,36 @@
             android:layout_marginEnd="20dp"
             android:padding="20dp"
             android:layout_marginBottom="6dp"
-            android:hint="メールアドレス"
+            android:hint="認証コード"
             android:inputType="textEmailAddress"
             android:background="@drawable/round_border_radius_30" />
-        <!-- メール送信ボタン -->
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="20dp"
+            android:layout_marginBottom="6dp"
+            android:hint="なまえ（新規登録の場合）"
+            android:background="@drawable/round_border_radius_30" />
+        <!-- ログインボタン -->
         <Button
-            android:id="@+id/send_mail"
+            android:id="@+id/registration_or_login_button"
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_margin="20dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:text="@string/send_mail_label"
+            android:text="@string/registration_or_login_button"
             android:clickable="false"
             android:background="@drawable/shape_rounded_corners_disabled_30dp" />
         <TextView
-            android:id="@+id/to_mail_login"
+            android:id="@+id/to_registration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/to_mail_login_label"
+            android:text="@string/to_registration_label"
             android:textSize="16dp"
             android:textColor="@color/text" />
-        <TextView
-            android:id="@+id/send_complete_password_reset_mail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/send_complete_reset_password_label"
-            android:textSize="16sp"
-            android:textColor="@color/button_disabled"
-            android:layout_marginTop="24dp"
-            android:visibility="gone" />
     </LinearLayout>
 </layout>
