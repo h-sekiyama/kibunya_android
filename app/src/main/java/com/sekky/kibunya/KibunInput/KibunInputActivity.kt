@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.R
@@ -46,6 +47,9 @@ class KibunInputActivity: AppCompatActivity() {
             val intent = Intent(this, KibunInputActivity::class.java)
             startActivity(intent)
         }
+
+        // 背景タップでキーボードを隠すための処理
+        Functions.addBackgroundFocus(binding.background, this)
 
         // 「これでおくる」ボタンタップ
         binding.kibunSendButton.setOnClickListener {
@@ -86,6 +90,7 @@ class KibunInputActivity: AppCompatActivity() {
             tapKibunIcon(4)
         }
 
+        // 日記本文ボックスの入力を監視
         binding.kibunEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }

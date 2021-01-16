@@ -22,13 +22,10 @@ class EmailLoginActivity: AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        val binding: ActivityEmailLoginBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_email_login)
+        val binding: ActivityEmailLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_email_login)
 
         // 背景タップでキーボードを隠すための処理
-        Functions.addBackgroundFocus(binding.background)
-        Functions.addKeyboardHide(this, binding.mailInput)
-        Functions.addKeyboardHide(this, binding.passwordInput)
+        Functions.addBackgroundFocus(binding.background, this)
 
         // アドレス入力ボックスの入力監視
         binding.mailInput.addTextChangedListener(object : TextWatcher {
@@ -61,11 +58,11 @@ class EmailLoginActivity: AppCompatActivity() {
             val emailText = binding.mailInput.text.toString()
             val passText = binding.passwordInput.text.toString()
 
-            val user = auth.currentUser
-            user!!.reload()
             auth.signInWithEmailAndPassword(emailText, passText)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        user!!.reload()
                         if (user.isEmailVerified) {
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)

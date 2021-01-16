@@ -32,9 +32,7 @@ class SmsSendCompleteActivity: AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_sms_send_complete)
 
         // 背景タップでキーボードを隠すための処理
-        Functions.addBackgroundFocus(binding.background)
-        Functions.addKeyboardHide(this, binding.credentialCodeInput)
-        Functions.addKeyboardHide(this, binding.nameInput)
+        Functions.addBackgroundFocus(binding.background, this)
 
         // 認証コード入力ボックスの入力監視
         binding.credentialCodeInput.addTextChangedListener(object : TextWatcher {

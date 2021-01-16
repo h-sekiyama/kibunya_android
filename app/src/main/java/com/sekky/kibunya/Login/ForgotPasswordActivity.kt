@@ -26,8 +26,7 @@ class ForgotPasswordActivity: AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // 背景タップでキーボードを隠すための処理
-        Functions.addBackgroundFocus(binding.background)
-        Functions.addKeyboardHide(this, binding.mailInput)
+        Functions.addBackgroundFocus(binding.background, this)
 
         // アドレス入力ボックスの入力監視
         binding.mailInput.addTextChangedListener(object : TextWatcher {

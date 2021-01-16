@@ -42,11 +42,7 @@ class SignUpActivity: AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
 
         // 背景タップでキーボードを隠すための処理
-        Functions.addBackgroundFocus(binding.background)
-        Functions.addKeyboardHide(this, binding.nameInput)
-        Functions.addKeyboardHide(this, binding.mailInput)
-        Functions.addKeyboardHide(this, binding.passwordInput)
-        Functions.addKeyboardHide(this, binding.telInput)
+        Functions.addBackgroundFocus(binding.background, this)
 
         // 名前入力ボックスの入力監視
         binding.nameInput.addTextChangedListener(object : TextWatcher {
