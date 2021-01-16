@@ -23,8 +23,6 @@ import java.util.concurrent.TimeUnit
 
 class SignUpActivity: AppCompatActivity() {
 
-    var smsName: String = ""
-
     private lateinit var auth: FirebaseAuth
 
     @SuppressLint("ClickableViewAccessibility")
@@ -32,6 +30,13 @@ class SignUpActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
+
+        // 既にログイン済みならメイン画面に遷移する
+        val isLogin: Boolean = auth.currentUser != null
+        if (isLogin) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         val binding: ActivitySignUpBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
@@ -167,32 +172,26 @@ class SignUpActivity: AppCompatActivity() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             // 新規ユーザー登録
             val user = auth.currentUser
-            val db = FirebaseFirestore.getInstance()
-            db.collection("users")
-                .document(user!!.uid)
-                .set(hashMapOf("name" to smsName))
-                .addOnSuccessListener {
-                    auth.signInWithCredential(credential)
-                        .addOnCompleteListener(this@SignUpActivity) { task ->
-                            if (task.isSuccessful) {
-                                // 新規ユーザー登録
-                                val db = FirebaseFirestore.getInstance()
-                                db.collection("users")
-                                    .document(user.uid)
-                                    .set(Users("名無しのネコちゃん"))
-                                    .addOnSuccessListener {
-                                        val intent = Intent(this@SignUpActivity, MainActivity::class.java)
-                                        startActivity(intent)
-                                    }.addOnFailureListener { e ->
-                                        Functions.showAlertOneButton(this@SignUpActivity, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
-                                    }
-                            } else {
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener(this@SignUpActivity) { task ->
+                    if (task.isSuccessful) {
+                        // 新規ユーザー登録
+                        val db = FirebaseFirestore.getInstance()
+                        db.collection("users")
+                            .document(user!!.uid)
+                            .set(Users("名無しのネコちゃん"))
+                            .addOnSuccessListener {
+                                val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                                startActivity(intent)
+                            }.addOnFailureListener { e ->
                                 Functions.showAlertOneButton(this@SignUpActivity, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                             }
-                        }
-                }.addOnFailureListener { e ->
-                    Functions.showAlertOneButton(this@SignUpActivity, "エラー", e.toString())
-                }
+                    } else {
+                        Functions.showAlertOneButton(this@SignUpActivity, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
+                    }
+            }.addOnFailureListener { e ->
+                Functions.showAlertOneButton(this@SignUpActivity, "エラー", e.toString())
+            }
         }
 
         // エラー

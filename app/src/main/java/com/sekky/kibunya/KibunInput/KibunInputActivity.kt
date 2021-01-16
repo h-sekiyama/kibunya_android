@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Kibuns
@@ -21,6 +22,8 @@ import java.time.format.DateTimeFormatter
 
 class KibunInputActivity: AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+
     private val binding: ActivityKibunInputBinding by lazy {
         DataBindingUtil.setContentView<ActivityKibunInputBinding>(this, R.layout.activity_kibun_input)
     }
@@ -30,6 +33,8 @@ class KibunInputActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
 
         // タブ処理
         binding.tabLayout.tab_button1.setImageResource(R.drawable.tab1_on)
@@ -44,6 +49,7 @@ class KibunInputActivity: AppCompatActivity() {
 
         // 「これでおくる」ボタンタップ
         binding.kibunSendButton.setOnClickListener {
+            val user = auth.currentUser
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
             val documentId: String = db.collection("kibuns").document().id
             db.collection("kibuns").document(documentId).set(Kibuns(
@@ -51,7 +57,7 @@ class KibunInputActivity: AppCompatActivity() {
                 documentId,
                 "",
                 selectedKibun,
-                "せっきー",
+                user!!.displayName,
                 binding.kibunEditText.text.toString(),
                 com.google.firebase.Timestamp.now(),
                 ""
