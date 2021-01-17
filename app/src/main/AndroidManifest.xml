@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login.SignUpActivity">
+        <activity android:name=".Login.SignUpActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -18,31 +19,43 @@
         </activity>
         <activity
             android:name=".Login.SendEmailActivity"
-            android:label="send_email_activity">
+            android:label="send_email_activity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Login.EmailLoginActivity"
-            android:label="email_login_activity">
+            android:label="email_login_activity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Login.ForgotPasswordActivity"
-            android:label="forgot_password_activity">
+            android:label="forgot_password_activity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Login.SmsSendCompleteActivity"
-            android:label="sms_send_complete">
+            android:label="sms_send_complete"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Kibunlist.MainActivity"
-            android:label="main_activity">
+            android:label="main_activity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".KibunDetail.KibunDetailActivity"
-            android:label="kibun_detail">
+            android:label="kibun_detail"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".KibunInput.KibunInputActivity"
-            android:label="Kibun_input">
+            android:label="Kibun_input"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".Other.OtherActivity"
+            android:label="Other"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

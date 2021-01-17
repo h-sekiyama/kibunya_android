@@ -13,6 +13,7 @@ import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
@@ -65,6 +66,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.tabLayout.tab_button1.setOnClickListener {
             val intent = Intent(this@MainActivity, KibunInputActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tabLayout.tab_button2.setOnClickListener {
+            val intent = Intent(this@MainActivity, OtherActivity::class.java)
             startActivity(intent)
         }
     }

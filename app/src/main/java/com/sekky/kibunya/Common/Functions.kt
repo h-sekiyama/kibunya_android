@@ -2,23 +2,12 @@ package com.sekky.kibunya.Common
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
-import androidx.databinding.BindingAdapter
-import androidx.databinding.ViewDataBinding
 import com.google.firebase.Timestamp
-import com.sekky.kibunya.KibunInput.KibunInputActivity
-import com.sekky.kibunya.Kibunlist.MainActivity
-import com.sekky.kibunya.R
-import com.sekky.kibunya.databinding.ActivitySignUpBinding
-import kotlinx.android.synthetic.main.tab_layout.view.*
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 

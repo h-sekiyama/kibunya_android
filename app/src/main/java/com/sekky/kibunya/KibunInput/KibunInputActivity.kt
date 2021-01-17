@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
@@ -45,6 +46,10 @@ class KibunInputActivity: AppCompatActivity() {
         }
         binding.tabLayout.tab_button1.setOnClickListener {
             val intent = Intent(this, KibunInputActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tabLayout.tab_button2.setOnClickListener {
+            val intent = Intent(this, OtherActivity::class.java)
             startActivity(intent)
         }
 

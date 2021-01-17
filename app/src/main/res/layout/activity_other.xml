@@ -1,0 +1,114 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backGround"
+        android:gravity="center_horizontal"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/headerBackground"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/today_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:text="@string/other_title"
+                android:textColor="@color/text"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- 家族を追加するボタン -->
+            <Button
+                android:id="@+id/add_family_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/add_family_label"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+                android:paddingStart="30dp"
+                android:drawablePadding="30dp"
+                android:elevation="10dp"
+                android:stateListAnimator="@drawable/button_state_list_anim_material_8dp"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/round_border_radius_50"
+                android:drawableStart="@drawable/icon_paw_small" />
+
+            <!-- 家族リストをみるボタン -->
+            <Button
+                android:id="@+id/view_family_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/view_family_label"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+                android:paddingStart="30dp"
+                android:drawablePadding="30dp"
+                android:elevation="10dp"
+                android:stateListAnimator="@drawable/button_state_list_anim_material_8dp"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/round_border_radius_50"
+                android:drawableStart="@drawable/icon_paw_small" />
+
+            <!-- プロフィールを変更するボタン -->
+            <Button
+                android:id="@+id/change_profile_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/change_profile_label"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+                android:paddingStart="30dp"
+                android:drawablePadding="30dp"
+                android:elevation="10dp"
+                android:stateListAnimator="@drawable/button_state_list_anim_material_8dp"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/round_border_radius_50"
+                android:drawableStart="@drawable/icon_paw_small" />
+
+            <!-- プロフィールを変更するボタン -->
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/logout_label"
+                android:textSize="18sp"
+                android:textColor="@color/text"
+                android:paddingStart="30dp"
+                android:drawablePadding="30dp"
+                android:elevation="10dp"
+                android:stateListAnimator="@drawable/button_state_list_anim_material_8dp"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/round_border_radius_50"
+                android:drawableStart="@drawable/icon_paw_small" />
+        </LinearLayout>
+
+        <!-- タブ -->
+        <include layout="@layout/tab_layout" android:id="@+id/tab_layout" />
+    </LinearLayout>
+</layout>

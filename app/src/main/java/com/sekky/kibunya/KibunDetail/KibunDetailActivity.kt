@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
+import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunDetailBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
@@ -56,6 +57,11 @@ class KibunDetailActivity: AppCompatActivity() {
             val intent = Intent(this, KibunInputActivity::class.java)
             startActivity(intent)
         }
+        binding.tabLayout.tab_button2.setOnClickListener {
+            val intent = Intent(this, OtherActivity::class.java)
+            startActivity(intent)
+        }
+
         // 戻るボタン
         binding.leftButton.setOnClickListener {
             finish()

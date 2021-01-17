@@ -23,4 +23,9 @@
     <string name="sms_send_complete_label">SMSで届いた認証コードを入力してください</string>
     <string name="registration_or_login_button">登録 or ログイン</string>
     <string name="send_complete_reset_password_label">パスワードリセットメールを送りました</string>
+    <string name="other_title">せってい</string>
+    <string name="add_family_label">家族を追加する</string>
+    <string name="view_family_label">家族リストをみる</string>
+    <string name="change_profile_label">プロフィールを変更する</string>
+    <string name="logout_label">ログアウトする</string>
 </resources>

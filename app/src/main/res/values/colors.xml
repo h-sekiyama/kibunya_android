@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFF</color>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
     <color name="backGround">#FFF6EE</color>
     <color name="border">#E5CCCA</color>
-    <color name="headerBorder">#F0BF48</color>
     <color name="headerBackground">#FFDC88</color>
     <color name="text">#70434A</color>
     <color name="button_disabled">#E5CCCA</color>
     <color name="button_enabled">#70434A</color>
-    <color name="red">#FF0000</color>
+    <color name="sub_text">#90636A</color>
 </resources>
