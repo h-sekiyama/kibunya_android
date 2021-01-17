@@ -38,12 +38,6 @@
                 android:gravity="center"
                 android:textColor="@color/text"
                 android:layout_weight="1"/>
-<!--            <ImageView-->
-<!--                android:id="@+id/calendar_button"-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:background="@drawable/calendar_icon" />-->
             <!-- １日進むボタン -->
             <Button
                 android:id="@+id/right_button"
