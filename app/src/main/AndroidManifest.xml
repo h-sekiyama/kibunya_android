@@ -57,6 +57,21 @@
             android:label="Other"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".Other.AddFamilyActivity"
+            android:label="add_family"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".Other.ViewFamilyListActivity"
+            android:label="view_family"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".Other.ChangeProfileActivity"
+            android:label="change_profile"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

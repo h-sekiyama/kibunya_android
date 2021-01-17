@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,11 +40,11 @@ class SmsSendCompleteActivity: AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateMailRegistorButtonEnable(binding)
+                updateRegistorOrLoginButtonEnable(binding)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                updateMailRegistorButtonEnable(binding)
+                updateRegistorOrLoginButtonEnable(binding)
             }
         })
 
@@ -90,7 +89,7 @@ class SmsSendCompleteActivity: AppCompatActivity() {
     }
 
     // 登録 or ログインボタンの有効/無効の切り替え
-    fun updateMailRegistorButtonEnable(binding: ActivitySmsSendCompleteBinding) {
+    fun updateRegistorOrLoginButtonEnable(binding: ActivitySmsSendCompleteBinding) {
         if (binding.credentialCodeInput.text.count() == 6) {
             binding.registrationOrLoginButton.isClickable = true
             binding.registrationOrLoginButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)

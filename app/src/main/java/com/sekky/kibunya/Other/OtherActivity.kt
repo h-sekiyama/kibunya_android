@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
-import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Login.SignUpActivity
@@ -16,8 +15,6 @@ import kotlinx.android.synthetic.main.tab_layout.view.*
 
 class OtherActivity: AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,10 +22,22 @@ class OtherActivity: AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_other)
 
         // 家族を追加するボタンタップ
+        binding.addFamilyButton.setOnClickListener {
+            val intent = Intent(this, AddFamilyActivity::class.java)
+            startActivity(intent)
+        }
 
         // 家族リストをみるボタンタップ
+        binding.viewFamilyButton.setOnClickListener {
+            val intent = Intent(this, ViewFamilyListActivity::class.java)
+            startActivity(intent)
+        }
 
         // プロフィール変更ボタンタップ
+        binding.changeProfileButton.setOnClickListener {
+            val intent = Intent(this, ChangeProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         // ログアウトボタンタップ
         binding.logoutButton.setOnClickListener {

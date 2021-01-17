@@ -41,6 +41,7 @@
             android:padding="20dp"
             android:layout_marginBottom="6dp"
             android:hint="なまえ"
+            android:textColor="@color/text"
             android:background="@drawable/round_border_radius_30" />
         <EditText
             android:id="@+id/mail_input"
@@ -51,6 +52,7 @@
             android:padding="20dp"
             android:layout_marginBottom="6dp"
             android:hint="メールアドレス"
+            android:textColor="@color/text"
             android:inputType="textEmailAddress"
             android:background="@drawable/round_border_radius_30" />
         <EditText
@@ -62,6 +64,7 @@
             android:padding="20dp"
             android:layout_marginBottom="6dp"
             android:hint="パスワード"
+            android:textColor="@color/text"
             android:inputType="textPassword"
             android:background="@drawable/round_border_radius_30" />
         <!-- 登録ボタン -->
@@ -112,6 +115,7 @@
             android:padding="20dp"
             android:layout_marginBottom="6dp"
             android:hint="電話番号（ハイフンなし）"
+            android:textColor="@color/text"
             android:inputType="number"
             android:background="@drawable/round_border_radius_30" />
         <!-- 認証ボタン -->

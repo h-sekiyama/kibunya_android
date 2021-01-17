@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
@@ -33,11 +32,11 @@ class EmailLoginActivity: AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateMailRegistorButtonEnable(binding)
+                updateLoginButtonEnable(binding)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                updateMailRegistorButtonEnable(binding)
+                updateLoginButtonEnable(binding)
             }
         })
         // パスワード入力ボックスの入力監視
@@ -46,11 +45,11 @@ class EmailLoginActivity: AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateMailRegistorButtonEnable(binding)
+                updateLoginButtonEnable(binding)
             }
 
             override fun afterTextChanged(s: Editable?) {
-                updateMailRegistorButtonEnable(binding)
+                updateLoginButtonEnable(binding)
             }
         })
         // ログインボタンタップ
@@ -87,7 +86,7 @@ class EmailLoginActivity: AppCompatActivity() {
     }
 
     // ログインボタンの有効/無効の切り替え
-    fun updateMailRegistorButtonEnable(binding: ActivityEmailLoginBinding) {
+    fun updateLoginButtonEnable(binding: ActivityEmailLoginBinding) {
         if (binding.mailInput.text.count() > 0 && binding.passwordInput.text.count() > 0) {
             binding.loginButton.isClickable = true
             binding.loginButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)

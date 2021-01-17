@@ -1,0 +1,118 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backGround"
+        android:gravity="center_horizontal"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/headerBackground"
+            android:orientation="horizontal">
+            <!-- 戻るボタン -->
+            <Button
+                android:id="@+id/left_button"
+                android:layout_width="23dp"
+                android:layout_height="36dp"
+                android:background="@drawable/arrow_l"
+                android:layout_gravity="left|center"
+                tools:ignore="RtlHardcoded"
+                android:layout_marginStart="20dp"/>
+            <TextView
+                android:id="@+id/today_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:text="@string/other_title"
+                android:textColor="@color/text"
+                android:layout_weight="1"
+                android:layout_marginEnd="24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="24dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="31dp"
+                    android:src="@drawable/icon_paw"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/change_profile_label"
+                    android:textColor="@color/text"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <!-- プロフ画像 -->
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@drawable/noimage"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:id="@+id/name_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
+                android:textColor="@color/text"
+                android:hint="なまえ"
+                android:background="@drawable/round_border_radius_30" />
+
+            <!-- 保存ボタン -->
+            <Button
+                android:id="@+id/profile_change_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/profile_change_label"
+                android:clickable="false"
+                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
+
+            <!-- 変更完了ラベル -->
+            <TextView
+                android:id="@+id/profile_change_complete_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_change_complete_label"
+                android:textColor="@color/text"
+                android:layout_marginTop="24dp"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+        <!-- タブ -->
+        <include layout="@layout/tab_layout" android:id="@+id/tab_layout" />
+    </LinearLayout>
+</layout>

@@ -28,4 +28,6 @@
     <string name="view_family_label">家族リストをみる</string>
     <string name="change_profile_label">プロフィールを変更する</string>
     <string name="logout_label">ログアウトする</string>
+    <string name="profile_change_label">保存する</string>
+    <string name="profile_change_complete_label">プロフィールを更新しました</string>
 </resources>
