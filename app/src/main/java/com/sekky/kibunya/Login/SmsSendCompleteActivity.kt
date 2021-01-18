@@ -89,7 +89,7 @@ class SmsSendCompleteActivity: AppCompatActivity() {
     }
 
     // 登録 or ログインボタンの有効/無効の切り替え
-    fun updateRegistorOrLoginButtonEnable(binding: ActivitySmsSendCompleteBinding) {
+    private fun updateRegistorOrLoginButtonEnable(binding: ActivitySmsSendCompleteBinding) {
         if (binding.credentialCodeInput.text.count() == 6) {
             binding.registrationOrLoginButton.isClickable = true
             binding.registrationOrLoginButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)

@@ -218,7 +218,7 @@ class SignUpActivity: AppCompatActivity() {
     }
 
     // アドレスで登録ボタンの有効/無効の切り替え
-    fun updateMailRegistorButtonEnable(binding: ActivitySignUpBinding) {
+    private fun updateMailRegistorButtonEnable(binding: ActivitySignUpBinding) {
         if (binding.nameInput.text.count() in 1..16 && binding.mailInput.text.count() > 0 && binding.passwordInput.text.count() > 0) {
             binding.registrationButton.isClickable = true
             binding.registrationButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
@@ -228,7 +228,7 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
     // 電話番号認証ボタンの有効/無効の切り替え
-    fun updateTelRegistorButtonEnable(binding: ActivitySignUpBinding) {
+    private fun updateTelRegistorButtonEnable(binding: ActivitySignUpBinding) {
         if (binding.telInput.text.count() == 11) {
             binding.sendAuthentication.isClickable = true
             binding.sendAuthentication.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)

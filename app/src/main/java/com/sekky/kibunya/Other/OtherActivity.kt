@@ -56,7 +56,7 @@ class OtherActivity: AppCompatActivity() {
         }
 
         // タブボタン処理
-        binding.tabLayout.tab_button0.setImageResource(R.drawable.tab0_on)
+        binding.tabLayout.tab_button2.setImageResource(R.drawable.tab2_on)
         binding.tabLayout.tab_button0.setOnClickListener {
             val intent = Intent(this@OtherActivity, MainActivity::class.java)
             startActivity(intent)

@@ -61,7 +61,7 @@ class ForgotPasswordActivity: AppCompatActivity() {
     }
 
     // メール送信ボタンの有効/無効の切り替え
-    fun updateMailSendButton(binding: ActivityForgotPasswordBinding) {
+    private fun updateMailSendButton(binding: ActivityForgotPasswordBinding) {
         if (binding.mailInput.text.count() > 0) {
             binding.sendMail.isClickable = true
             binding.sendMail.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
