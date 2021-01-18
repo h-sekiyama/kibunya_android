@@ -32,6 +32,10 @@ class KibunsAdapter(
                 3 -> holder.binding.kibunIcon.setImageResource(R.drawable.kibun_icon3)
                 4 -> holder.binding.kibunIcon.setImageResource(R.drawable.kibun_icon4)
             }
+            // 添付画像あり表示
+            if (item.image != "") {
+                holder.binding.imageIcon.visibility = View.VISIBLE
+            }
             // 日記時間表示
             holder.binding.kibunTime.text = Functions.getTimeString(item.time)
             holder.binding.kibunItemLinearLayout.setOnClickListener {

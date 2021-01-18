@@ -1,9 +1,14 @@
 package com.sekky.kibunya.KibunDetail
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
+import com.google.firebase.storage.FirebaseStorage
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Other.OtherActivity
@@ -20,16 +25,32 @@ class KibunDetailActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val intent: Intent = getIntent()
         val text: String? = intent.getStringExtra("text")
         val date: String? = intent.getStringExtra("date")
         val name: String? = intent.getStringExtra("name")
         val kibun: Int = intent.getIntExtra("kibun", 0)
         val time: String? = intent.getStringExtra("time")
         val image: String? = intent.getStringExtra("image")
+        val userId: String? = intent.getStringExtra("userId")
+
+        // CloudStorageを使う準備
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageRef = storageRef.child("profileIcon/${userId}.jpg")
 
         // 日時
         binding.date = date
+        // ユーザーアイコン
+        imageRef.getBytes(1000000).addOnSuccessListener {
+            // 画像が存在すればそれを表示
+            Glide.with(this)
+                .load(imageRef)
+                .placeholder(R.drawable.noimage)
+                .signature(ObjectKey(System.currentTimeMillis()))
+                .into(binding.userImage)
+        }.addOnFailureListener {
+            // 取得失敗したらデフォルト画像表示
+            binding.userImage.setImageResource(R.drawable.noimage)
+        }
         // ユーザー名
         binding.name = name
         // 気分アイコン
@@ -43,6 +64,13 @@ class KibunDetailActivity: AppCompatActivity() {
         // 時間
         binding.time = time
         // 画像
+        if (image != "") {
+            Glide.with(this)
+                .load(Uri.parse(image))
+                .signature(ObjectKey(System.currentTimeMillis()))
+                .into(binding.kibunImage)
+            binding.kibunImage.visibility = View.VISIBLE
+        }
 
         // 本文
         binding.kibunText = text

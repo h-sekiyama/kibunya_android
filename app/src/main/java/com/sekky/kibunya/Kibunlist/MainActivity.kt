@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                         putExtra("kibun", data.kibun)
                         putExtra("time", Functions.getTimeString(data.time))
                         putExtra("image", data.image)
+                        putExtra("userId", data.user_id)
                     }
                     startActivity(intent)
                 }

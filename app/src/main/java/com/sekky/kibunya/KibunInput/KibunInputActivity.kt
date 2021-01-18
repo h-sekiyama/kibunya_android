@@ -164,7 +164,7 @@ class KibunInputActivity: AppCompatActivity() {
         binding.kibunImageSelect.setOnClickListener {
             CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(131, 105)
+                .setAspectRatio(360, 270)
                 .start(this)
         }
 

@@ -25,6 +25,7 @@
                 android:id="@+id/kibun_icon"
                 android:layout_width="80dp"
                 android:layout_height="68dp"
+                android:src="@drawable/kibun_icon0"
                 android:layout_marginEnd="10dp"/>
 
             <LinearLayout
@@ -38,7 +39,7 @@
                     android:layout_height="50dp"
                     android:text="@{kibuns.text}"
                     android:textSize="16sp"
-                    tools:text="チャット本文"
+                    tools:text="日記本文日記本文日記本文日記本文日記本文日記本文"
                     android:maxLines="2"
                     android:ellipsize="end"/>
 
@@ -54,7 +55,7 @@
                         android:background="@drawable/noimage" />
                     <!-- ユーザー名 -->
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:text="@{kibuns.name}"
@@ -64,16 +65,23 @@
                         tools:ignore="RtlHardcoded"
                         android:layout_weight="1"
                         android:gravity="left|center" />
+                    <!-- 画像ありアイコン -->
+                    <ImageView
+                        android:id="@+id/image_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="24dp"
+                        android:visibility="invisible"
+                        android:src="@drawable/diary_image_icon"
+                        android:layout_gravity="center_vertical" />
                     <!-- 投稿日時 -->
                     <TextView
                         android:id="@+id/kibun_time"
-                        android:layout_width="match_parent"
+                        android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
                         android:textSize="12sp"
                         tools:text="13:54"
                         tools:ignore="RtlHardcoded"
-                        android:layout_weight="1"
                         android:gravity="right|center"/>
                 </LinearLayout>
             </LinearLayout>
