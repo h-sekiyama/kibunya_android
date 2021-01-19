@@ -30,4 +30,9 @@
     <string name="logout_label">ログアウトする</string>
     <string name="profile_change_label">保存する</string>
     <string name="profile_change_complete_label">プロフィールを更新しました</string>
+    <string name="search_label">検索</string>
+    <string name="add_family_button_label">家族に追加する</string>
+    <string name="send_my_user_id_button_label">自分のIDを送る</string>
+    <string name="my_own_user_id_label">自分のユーザーIDです</string>
+    <string name="send_my_user_id_label">自分のユーザーID</string>
 </resources>

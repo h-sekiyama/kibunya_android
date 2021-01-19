@@ -41,7 +41,155 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="12dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="31dp"
+                    android:src="@drawable/icon_paw"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_gravity="center" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/add_family_label"
+                    android:textColor="@color/text"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/user_id_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text"
+                android:inputType="textEmailAddress"
+                android:hint="ユーザーIDを入力"
+                android:background="@drawable/round_border_radius_30" />
+
+            <!-- 検索ボタン -->
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_margin="4dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/search_label"
+                android:clickable="false"
+                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
+
+            <TextView
+                android:id="@+id/searched_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"
+                tools:text="ゆっこ"
+                android:visibility="invisible"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp" />
+
+            <!-- 家族に追加ボタン -->
+            <Button
+                android:id="@+id/add_family_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_margin="4dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/add_family_button_label"
+                android:clickable="false"
+                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
+
+            <LinearLayout
+                android:id="@+id/add_family_complete_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/new_family_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text"
+                    tools:text="ゆっこゆっこ"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    tools:text="を家族に追加しました!"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@color/border" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="31dp"
+                    android:src="@drawable/icon_paw"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/send_my_user_id_label"
+                    android:textColor="@color/text"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/my_user_id_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="20dp"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text"
+                android:background="@drawable/round_border_radius_30" />
+
+            <!-- 自分のユーザーIDを送るボタン -->
+            <Button
+                android:id="@+id/send_my_user_id_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/send_my_user_id_button_label"
+                android:background="@drawable/shape_rounded_corners_enabled_30dp" />
         </LinearLayout>
 
         <!-- タブ -->

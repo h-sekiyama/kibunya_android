@@ -40,6 +40,9 @@ class KibunsAdapter(
                 4 -> holder.binding.kibunIcon.setImageResource(R.drawable.kibun_icon4)
             }
             // ユーザーアイコン
+            if (item.user_id == null) {
+                return
+            }
             val storageRef = FirebaseStorage.getInstance().reference
             val imageRef = storageRef.child("profileIcon/${item.user_id}.jpg")
             imageRef.getBytes(1000000).addOnSuccessListener {
@@ -55,7 +58,7 @@ class KibunsAdapter(
             }
             // ユーザー名
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-            val docRef = db.collection("users").document(item.user_id!!)
+            val docRef = db.collection("users").document(item.user_id)
             docRef.get()
                 .addOnSuccessListener { document ->
                     holder.binding.userName.text = document.get("name").toString()
