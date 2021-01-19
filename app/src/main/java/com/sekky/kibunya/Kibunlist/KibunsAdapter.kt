@@ -1,9 +1,14 @@
 package com.sekky.kibunya.Kibunlist
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.R
@@ -15,9 +20,11 @@ class KibunsAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var listener: OnItemClickListener
     constructor() : this(listOf())
+    var context: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ListKibunItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
         return ListKibunViewHolder(binding)
     }
 
@@ -32,6 +39,27 @@ class KibunsAdapter(
                 3 -> holder.binding.kibunIcon.setImageResource(R.drawable.kibun_icon3)
                 4 -> holder.binding.kibunIcon.setImageResource(R.drawable.kibun_icon4)
             }
+            // ユーザーアイコン
+            val storageRef = FirebaseStorage.getInstance().reference
+            val imageRef = storageRef.child("profileIcon/${item.user_id}.jpg")
+            imageRef.getBytes(1000000).addOnSuccessListener {
+                // 画像が存在すればそれを表示
+                Glide.with(context!!)
+                    .load(imageRef)
+                    .placeholder(R.drawable.noimage)
+                    .signature(ObjectKey(System.currentTimeMillis()))
+                    .into(holder.binding.userIcon)
+            }.addOnFailureListener {
+                // 取得失敗したらデフォルト画像表示
+                holder.binding.userIcon.setImageResource(R.drawable.noimage)
+            }
+            // ユーザー名
+            val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+            val docRef = db.collection("users").document(item.user_id!!)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    holder.binding.userName.text = document.get("name").toString()
+                }
             // 添付画像あり表示
             if (item.image != "") {
                 holder.binding.imageIcon.visibility = View.VISIBLE

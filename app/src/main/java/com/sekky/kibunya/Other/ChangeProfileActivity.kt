@@ -1,34 +1,28 @@
 package com.sekky.kibunya.Other
 
-import android.R.attr.data
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
+import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivityChangeProfileBinding
-import com.sekky.kibunya.databinding.ActivityKibunInputBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_change_profile.*
@@ -196,21 +190,30 @@ class ChangeProfileActivity: AppCompatActivity() {
                         binding.profileChangeButton.isClickable = false
                         binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
 
-                        if (isChangedProfIcon) {
-                            val bitmap = (binding.profileImage.drawable as BitmapDrawable).bitmap
-                            val baos = ByteArrayOutputStream()
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
-                            val data = baos.toByteArray()
-                            val uploadTask = imageRef.putBytes(data)
-                            uploadTask.addOnFailureListener { e ->
-                                Functions.showAlertOneButton(
-                                    this@ChangeProfileActivity,
-                                    "エラー",
-                                    e.message.toString()
-                                )
-                            }.addOnSuccessListener { taskSnapshot ->
-                                isChangedProfIcon = false
+                        // usersコレクションも書き換え
+                        currentUser.reload()
+                        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+                        db.collection("users").document(currentUser.uid).set(
+                            Users(currentUser.displayName)
+                        ).addOnSuccessListener {
+                            if (isChangedProfIcon) {
+                                val bitmap = (binding.profileImage.drawable as BitmapDrawable).bitmap
+                                val baos = ByteArrayOutputStream()
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                                val data = baos.toByteArray()
+                                val uploadTask = imageRef.putBytes(data)
+                                uploadTask.addOnFailureListener { e ->
+                                    Functions.showAlertOneButton(
+                                        this@ChangeProfileActivity,
+                                        "エラー",
+                                        e.message.toString()
+                                    )
+                                }.addOnSuccessListener {
+                                    isChangedProfIcon = false
+                                }
                             }
+                        }.addOnFailureListener {
+                            Functions.showAlertOneButton(this@ChangeProfileActivity, "エラー", it.message.toString())
                         }
                     }
                     false -> Functions.showAlertOneButton(

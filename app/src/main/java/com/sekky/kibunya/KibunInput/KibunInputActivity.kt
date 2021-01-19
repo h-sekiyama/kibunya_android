@@ -150,7 +150,7 @@ class KibunInputActivity: AppCompatActivity() {
                         "エラー",
                         e.message.toString()
                     )
-                }.addOnSuccessListener { taskSnapshot ->
+                }.addOnSuccessListener {
                     imageRef.downloadUrl.addOnSuccessListener { url ->
                         sendDiary(user, db, documentId, url.toString())
                     }
