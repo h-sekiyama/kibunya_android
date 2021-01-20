@@ -2,17 +2,20 @@ package com.sekky.kibunya.Kibunlist
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
@@ -25,6 +28,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 招待から起動した場合はユーザーIDを取得し家族追加画面に遷移
+        val uri: Uri? = this.intent.data
+        if (uri != null) {
+            val intent = Intent(this, AddFamilyActivity::class.java).apply {
+                putExtra("userId", uri.toString().takeLast(28))
+            }
+            startActivity(intent)
+        }
+
         // 今日の日付を表示
         binding.todayText.setText(Functions.getTodayString())
         init()

@@ -100,7 +100,7 @@
                 tools:text="ゆっこ"
                 android:visibility="invisible"
                 android:layout_gravity="center_horizontal"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <!-- 家族に追加ボタン -->
             <Button
@@ -120,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
+                android:visibility="invisible"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/new_family_name"
@@ -133,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    tools:text="を家族に追加しました!"
+                    android:text="を家族に追加しました!"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -175,7 +176,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:padding="20dp"
-                android:inputType="textEmailAddress"
+                android:inputType="none"
                 android:layout_marginBottom="4dp"
                 android:textColor="@color/text"
                 android:background="@drawable/round_border_radius_30" />
