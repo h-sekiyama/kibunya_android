@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // プログレスバー用オーバーレイを表示
+        binding.overlay.visibility = View.VISIBLE
+
         // 招待から起動した場合はユーザーIDを取得し家族追加画面に遷移
         val uri: Uri? = this.intent.data
         if (uri != null) {
@@ -70,6 +73,10 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             })
+
+            // プログレスバー非表示
+            binding.overlay.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
         }
 
         // タブボタン処理
