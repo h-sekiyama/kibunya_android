@@ -131,10 +131,11 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp" />
                 <TextView
+                    android:id="@+id/add_family_complete_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="を家族に追加しました!"
+                    android:text="@string/add_family_complete_text"
                     android:textSize="16sp" />
             </LinearLayout>
 

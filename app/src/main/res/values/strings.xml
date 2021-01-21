@@ -35,4 +35,5 @@
     <string name="send_my_user_id_button_label">自分のIDを送る</string>
     <string name="my_own_user_id_label">自分のユーザーIDです</string>
     <string name="send_my_user_id_label">自分のユーザーID</string>
+    <string name="add_family_complete_text">を家族に追加しました!</string>
 </resources>

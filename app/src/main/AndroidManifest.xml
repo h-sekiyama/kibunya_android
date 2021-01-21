@@ -45,7 +45,7 @@
             android:name=".Kibunlist.MainActivity"
             android:label="main_activity"
             android:screenOrientation="portrait">
-            <intent-filter android:label="user_id" >
+            <intent-filter android:label="家族ダイアリー" >
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

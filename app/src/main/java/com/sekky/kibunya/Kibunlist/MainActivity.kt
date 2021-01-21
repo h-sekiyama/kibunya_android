@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val uri: Uri? = this.intent.data
         if (uri != null) {
             val intent = Intent(this, AddFamilyActivity::class.java).apply {
-                putExtra("userId", uri.toString().takeLast(28))
+                putExtra("kazokuDiary", uri.toString().takeLast(28))
             }
             startActivity(intent)
         }

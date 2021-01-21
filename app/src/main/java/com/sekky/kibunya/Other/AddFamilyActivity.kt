@@ -1,8 +1,6 @@
 package com.sekky.kibunya.Other
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,16 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Families
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
-import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivityAddFamilyBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
-import java.io.ByteArrayOutputStream
 
 class AddFamilyActivity: AppCompatActivity() {
 
@@ -71,19 +68,74 @@ class AddFamilyActivity: AppCompatActivity() {
         binding.addFamilyButton.setOnClickListener {
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-            // 自分と相手がまだ誰とも家族になって無い場合
-            db.collection("families").document().set(
-                Families(listOf(userId, user!!.uid))
-            ).addOnSuccessListener {
-                // 追加したユーザー名を表示
-                binding.newFamilyName.setText(binding.searchedUserName.text)
-                binding.addFamilyCompleteLabel.visibility = View.VISIBLE
-                // 家族追加ボタンをdisabledにする
-                binding.addFamilyButton.isClickable = false
-                binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
-                updateSearchButtonEnable()
-            }.addOnFailureListener {
-                Functions.showAlertOneButton(this@AddFamilyActivity, "エラー", it.message.toString())
+            val familyRef = db.collection("families")
+            val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)   // 自分のIDを含むドキュメントを検索
+            val containsAddUserUidDocument = familyRef.whereArrayContains("user_id", binding.userIdInput.text.toString())  // 追加しようとしているユーザーのIDを含むドキュメントを検索
+
+            containsMyUidDocument.get().addOnSuccessListener { result1 ->
+                containsAddUserUidDocument.get().addOnSuccessListener { result2 ->
+                    if (result1.count() == 0 && result2.count() == 0) { // 自分も相手もまだ家族がいない時
+                        db.collection("families").document().set(
+                            Families(listOf(binding.userIdInput.text.toString(), user.uid))
+                        ).addOnSuccessListener {
+                            updateActionAfterAddFamily()
+                        }.addOnFailureListener {
+                            Functions.showAlertOneButton(
+                                this@AddFamilyActivity,
+                                "エラー",
+                                it.message.toString()
+                            )
+                        }
+                    } else if (result1.count() != 0 && result2.count() != 0) {   // どっちも家族がいる時
+                        if (result1.documents[0].id == result2.documents[0].id) {    // 既に家族になってる時
+                            binding.addFamilyCompleteLabel.visibility = View.VISIBLE
+                            binding.addFamilyCompleteText.text = "は既に家族登録済みです"
+                        } else if (result1.documents[0].id != result2.documents[0].id) {  // どちらにも別々の家族がいる時
+                            // 家族をマージ
+                            val familyList = result2.documents[0].get("user_id") as List<*>
+                            for (i in 0..familyList.size - 1) {
+                                db.collection("families")
+                                    .document(result1.documents[0].id)
+                                    .update("user_id", FieldValue.arrayUnion(familyList[i]))
+                            }
+                            // 2つ目の家族は削除
+                            db.collection("families")
+                                .document(result2.documents[0].id)
+                                .delete()
+                                .addOnSuccessListener {
+                                    updateActionAfterAddFamily()
+                                }
+                        }
+                    } else if (result1.count() != 0 || result2.count() != 0) {
+                        if (result1.count() != 0 && result2.count() == 0) {  // 自分にだけ家族がいる時
+                            db.collection("families")
+                                .document(result1.documents[0].id)
+                                .update("user_id", FieldValue.arrayUnion(binding.userIdInput.text.toString()))
+                                .addOnSuccessListener {
+                                    updateActionAfterAddFamily()
+                                }.addOnFailureListener {
+                                    Functions.showAlertOneButton(
+                                        this@AddFamilyActivity,
+                                        "エラー",
+                                        it.message.toString()
+                                    )
+                                }
+                        } else if (result1.count() == 0 && result2.count() != 0) {  // 相手にだけ家族がいる時
+                            db.collection("families")
+                                .document(result2.documents[0].id)
+                                .update("user_id", FieldValue.arrayUnion(user.uid))
+                                .addOnSuccessListener {
+                                    updateActionAfterAddFamily()
+                                }.addOnFailureListener {
+                                    Functions.showAlertOneButton(
+                                        this@AddFamilyActivity,
+                                        "エラー",
+                                        it.message.toString()
+                                    )
+                                }
+                        }
+                    }
+                }
             }
         }
 
@@ -101,7 +153,7 @@ class AddFamilyActivity: AppCompatActivity() {
                             "iPhoneの方は以下をタップ！\n" +
                             "kazokuDiary://login?id=" + binding.myUserIdInput.text.toString() + "\n\n" +
                             "Androidの方は以下をタップ！\n" +
-                            "http://kazoku-diary?user-id=" + binding.myUserIdInput.text.toString() + "\n\n" +
+                            "http://kazoku-diary?kazokuDiary=" + binding.myUserIdInput.text.toString() + "\n\n" +
                             "アプリをダウンロード\n" +
                             "iOS版：https://apps.apple.com/us/app/id1528947553\n\n" +
                             "Android版：https://hogehoge.com"
@@ -134,6 +186,7 @@ class AddFamilyActivity: AppCompatActivity() {
         }
     }
 
+    // ユーザーを検索する処理
     private fun searchUser(user: FirebaseUser) {
         // 入力したのが自分のユーザーIDの場合
         if (binding.userIdInput.text.toString() == user.uid ?: "") {
@@ -150,6 +203,18 @@ class AddFamilyActivity: AppCompatActivity() {
                     binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
                 }
         }
+    }
+
+    // ユーザーを追加したあとの諸々の処理
+    private fun updateActionAfterAddFamily() {
+        // 追加したユーザー名を表示
+        binding.newFamilyName.text = binding.searchedUserName.text
+        binding.addFamilyCompleteLabel.visibility = View.VISIBLE
+        binding.addFamilyCompleteText.text = getString(R.string.add_family_complete_text)
+        // 家族追加ボタンをdisabledにする
+        binding.addFamilyButton.isClickable = false
+        binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
+        updateSearchButtonEnable()
     }
 
     // プロフィール変更ボタンの有効/無効の切り替え
