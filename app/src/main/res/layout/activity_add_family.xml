@@ -90,7 +90,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="@string/search_label"
-                android:clickable="false"
+                android:enabled="false"
                 android:background="@drawable/shape_rounded_corners_disabled_30dp" />
 
             <TextView
@@ -112,7 +112,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="@string/add_family_button_label"
-                android:clickable="false"
+                android:enabled="false"
                 android:background="@drawable/shape_rounded_corners_disabled_30dp" />
 
             <LinearLayout

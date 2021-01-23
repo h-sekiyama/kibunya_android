@@ -188,7 +188,7 @@ class KibunInputActivity: AppCompatActivity() {
         ).addOnSuccessListener {
             binding.sendComplete.visibility = View.VISIBLE
             binding.kibunEditText.text.clear()
-            binding.kibunSendButton.isClickable = false
+            binding.kibunSendButton.isEnabled = false
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
             binding.kibunImageSelect.setImageResource(R.drawable.diary_image_icon)
         }.addOnFailureListener {
@@ -199,10 +199,10 @@ class KibunInputActivity: AppCompatActivity() {
     // 送信ボタンの有効/無効の切り替え
     private fun updateSendButtonEnable() {
         if (binding.kibunEditText.text.count() in 1..300 && selectedKibun != null) {
-            binding.kibunSendButton.isClickable = true
+            binding.kibunSendButton.isEnabled = true
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
         } else {
-            binding.kibunSendButton.isClickable = false
+            binding.kibunSendButton.isEnabled = false
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
         }
     }

@@ -99,8 +99,7 @@ class MainActivity : AppCompatActivity() {
             calendar.time = showDiaryDate
             calendar.add(Calendar.DAY_OF_MONTH, -1)
             showDiaryDate = calendar.time
-            binding.rightButton.isClickable = true
-            binding.rightButton.isClickable = true
+            binding.rightButton.isEnabled = true
             binding.rightButton.setBackgroundResource(R.drawable.arrow_r)
             init()
         }
@@ -111,9 +110,8 @@ class MainActivity : AppCompatActivity() {
             calendar.time = showDiaryDate
             calendar.add(Calendar.DAY_OF_MONTH, 1)
             showDiaryDate = calendar.time
-            binding.rightButton.isClickable = true
-            if (showDiaryDate == Date()) {  // 表示してる日付が今日ならそれ以上進めなくする
-                binding.rightButton.isClickable = false
+            if (SimpleDateFormat("dd-MM-yyyy").format(showDiaryDate) == SimpleDateFormat("dd-MM-yyyy").format(Date())) {  // 表示してる日付が今日ならそれ以上進めなくする
+                binding.rightButton.isEnabled = false
                 binding.rightButton.setBackgroundResource(R.drawable.arrow_r_off)
             }
             init()

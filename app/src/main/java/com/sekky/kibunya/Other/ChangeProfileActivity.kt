@@ -103,7 +103,7 @@ class ChangeProfileActivity: AppCompatActivity() {
                         .into(binding.profileImage)
 
                     // 保存ボタンをアクティブにする
-                    binding.profileChangeButton.isClickable = true
+                    binding.profileChangeButton.isEnabled = true
                     binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
 
                     isChangedProfIcon = true
@@ -168,10 +168,10 @@ class ChangeProfileActivity: AppCompatActivity() {
     // プロフィール変更ボタンの有効/無効の切り替え
     private fun updateChangeProfileButtonEnable() {
         if (binding.nameInput.text.count() in 1..16 && beforeName != binding.nameInput.text.toString()) {
-            binding.profileChangeButton.isClickable = true
+            binding.profileChangeButton.isEnabled = true
             binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
         } else {
-            binding.profileChangeButton.isClickable = false
+            binding.profileChangeButton.isEnabled = false
             binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
         }
     }
@@ -187,7 +187,7 @@ class ChangeProfileActivity: AppCompatActivity() {
                     true -> apply {
                         beforeName = binding.nameInput.text.toString()
                         binding.profileChangeCompleteLabel.visibility = View.VISIBLE
-                        binding.profileChangeButton.isClickable = false
+                        binding.profileChangeButton.isEnabled = false
                         binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
 
                         // usersコレクションも書き換え

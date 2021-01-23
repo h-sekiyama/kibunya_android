@@ -88,10 +88,10 @@ class EmailLoginActivity: AppCompatActivity() {
     // ログインボタンの有効/無効の切り替え
     private fun updateLoginButtonEnable(binding: ActivityEmailLoginBinding) {
         if (binding.mailInput.text.count() > 0 && binding.passwordInput.text.count() > 0) {
-            binding.loginButton.isClickable = true
+            binding.loginButton.isEnabled = true
             binding.loginButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
         } else {
-            binding.loginButton.isClickable = false
+            binding.loginButton.isEnabled = false
             binding.loginButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
         }
     }

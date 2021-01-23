@@ -104,7 +104,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/white"
                 android:text="@string/profile_change_label"
-                android:clickable="false"
+                android:enabled="false"
                 android:background="@drawable/shape_rounded_corners_disabled_30dp" />
 
             <!-- 変更完了ラベル -->

@@ -199,7 +199,7 @@ class AddFamilyActivity: AppCompatActivity() {
                     // HITしたユーザー名を表示
                     binding.searchedUserName.text = document.get("name").toString()
                     binding.searchedUserName.visibility = View.VISIBLE
-                    binding.addFamilyButton.isClickable = true
+                    binding.addFamilyButton.isEnabled = true
                     binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
                 }
         }
@@ -212,7 +212,7 @@ class AddFamilyActivity: AppCompatActivity() {
         binding.addFamilyCompleteLabel.visibility = View.VISIBLE
         binding.addFamilyCompleteText.text = getString(R.string.add_family_complete_text)
         // 家族追加ボタンをdisabledにする
-        binding.addFamilyButton.isClickable = false
+        binding.addFamilyButton.isEnabled = false
         binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
         updateSearchButtonEnable()
     }
@@ -220,10 +220,10 @@ class AddFamilyActivity: AppCompatActivity() {
     // プロフィール変更ボタンの有効/無効の切り替え
     private fun updateSearchButtonEnable() {
         if (binding.userIdInput.text.count() == 28) {
-            binding.searchButton.isClickable = true
+            binding.searchButton.isEnabled = true
             binding.searchButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
         } else {
-            binding.searchButton.isClickable = false
+            binding.searchButton.isEnabled = false
             binding.searchButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
         }
     }
