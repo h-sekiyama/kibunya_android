@@ -27,9 +27,10 @@
             android:layout_marginEnd="20dp"
             android:padding="20dp"
             android:layout_marginBottom="6dp"
+            android:maxLines="1"
             android:hint="認証コード"
             android:textColor="@color/text"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:background="@drawable/round_border_radius_30" />
         <EditText
             android:id="@+id/name_input"
@@ -39,6 +40,8 @@
             android:layout_marginEnd="20dp"
             android:padding="20dp"
             android:layout_marginBottom="6dp"
+            android:inputType="text"
+            android:maxLines="1"
             android:hint="なまえ（新規登録の場合）"
             android:textColor="@color/text"
             android:background="@drawable/round_border_radius_30" />

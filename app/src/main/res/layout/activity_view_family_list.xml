@@ -41,7 +41,65 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="12dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="31dp"
+                    android:src="@drawable/icon_paw"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_gravity="center" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left"
+                    android:layout_marginStart="6dp"
+                    android:text="@string/view_family_list_title"
+                    android:textColor="@color/text"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/backGround"
+                android:layout_marginBottom="200dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/family_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true" />
+
+                <TextView
+                    android:id="@+id/no_family_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/no_family"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:gravity="center" />
+
+            </RelativeLayout>
+
+            <!-- 家出ボタン -->
+            <Button
+                android:id="@+id/runaway_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="-180dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/runaway_button_label"
+                android:clickable="false"
+                android:background="@drawable/shape_rounded_corners_negative_30dp" />
         </LinearLayout>
 
         <!-- タブ -->

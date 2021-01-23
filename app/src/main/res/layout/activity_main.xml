@@ -28,7 +28,7 @@
                     android:id="@+id/left_button"
                     android:layout_width="23dp"
                     android:layout_height="36dp"
-                    android:background="@drawable/arrow_l_off"
+                    android:background="@drawable/arrow_l"
                     android:layout_gravity="left|center"
                     tools:ignore="RtlHardcoded"
                     android:layout_marginStart="20dp"/>
@@ -49,6 +49,7 @@
                     android:layout_height="36dp"
                     android:background="@drawable/arrow_r_off"
                     android:layout_gravity="right|center"
+                    android:clickable="false"
                     tools:ignore="RtlHardcoded"
                     android:layout_marginEnd="20dp"/>
             </LinearLayout>
@@ -57,7 +58,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/backGround"
-                tools:context="com.mtzack.chat.MainActivity"
                 android:layout_marginBottom="90dp">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -65,6 +65,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true" />
+
+                <TextView
+                    android:id="@+id/no_diary_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="@string/no_diary"
+                    android:textSize="16sp" />
             </RelativeLayout>
 
             <!-- タブ -->

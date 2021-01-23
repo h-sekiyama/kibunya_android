@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +15,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
-import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivitySignUpBinding

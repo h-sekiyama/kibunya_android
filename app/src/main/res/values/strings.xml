@@ -36,4 +36,8 @@
     <string name="my_own_user_id_label">自分のユーザーIDです</string>
     <string name="send_my_user_id_label">自分のユーザーID</string>
     <string name="add_family_complete_text">を家族に追加しました!</string>
+    <string name="view_family_list_title">家族リスト</string>
+    <string name="runaway_button_label">家出する(家族解除)</string>
+    <string name="no_family">まだ家族が1人もいません</string>
+    <string name="no_diary">誰も日記を書いていません</string>
 </resources>

@@ -21,10 +21,9 @@ class Functions {
             return df.format(date)
         }
 
-        // 曜日付きの今日の日付を取得
+        // 曜日付きの日付を取得
         @SuppressLint("SimpleDateFormat")
-        fun getTodayString(): String {
-            val date: Date = Date()
+        fun getTodayString(date: Date): String {
             val df = SimpleDateFormat("YYYY/MM/dd")
             val calendar: Calendar = Calendar.getInstance()
             val day: Int = calendar.get(Calendar.DAY_OF_WEEK)

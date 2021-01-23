@@ -9,4 +9,5 @@
     <color name="button_disabled">#E5CCCA</color>
     <color name="button_enabled">#70434A</color>
     <color name="sub_text">#90636A</color>
+    <color name="negative_button">#435A70</color>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -174,16 +174,18 @@ class KibunInputActivity: AppCompatActivity() {
 
     // 日記の更新
     private fun sendDiary(user: FirebaseUser?, db: FirebaseFirestore, documentId: String, imageUrl: String = "") {
-        db.collection("kibuns").document(documentId).set(Kibuns(
+        db.collection("kibuns").document(documentId).set(
+            Kibuns(
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日")),
             documentId,
             imageUrl,
             selectedKibun,
             user!!.displayName,
             binding.kibunEditText.text.toString(),
-            com.google.firebase.Timestamp.now(),
+            Timestamp.now(),
             user.uid
-        )).addOnSuccessListener {
+        )
+        ).addOnSuccessListener {
             binding.sendComplete.visibility = View.VISIBLE
             binding.kibunEditText.text.clear()
             binding.kibunSendButton.isClickable = false

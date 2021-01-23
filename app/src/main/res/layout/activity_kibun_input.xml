@@ -157,7 +157,7 @@
                     android:layout_height="200dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="-20dp"
+                    android:layout_marginTop="-14dp"
                     app:bl_bubbleColor="@color/white"
                     app:bl_arrowDirection="top"
                     app:bl_arrowHeight="20dp"
@@ -173,6 +173,7 @@
                         android:layout_height="match_parent"
                         android:textSize="14sp"
                         android:layout_margin="8dp"
+                        android:maxLines="1"
                         tools:text="ほげほげ"
                         android:background="@color/white"
                         android:gravity="top" />

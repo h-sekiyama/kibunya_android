@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.LinearLayout.VERTICAL
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
@@ -20,63 +19,104 @@ import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
     }
 
+    // 日記を表示している日付（Date型）
+    private var showDiaryDate: Date = Date()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // プログレスバー用オーバーレイを表示
-        binding.overlay.visibility = View.VISIBLE
 
         // 招待から起動した場合はユーザーIDを取得し家族追加画面に遷移
         val uri: Uri? = this.intent.data
         if (uri != null) {
             val intent = Intent(this, AddFamilyActivity::class.java).apply {
-                putExtra("kazokuDiary", uri.toString().takeLast(28))
+                putExtra("userId", uri.toString().takeLast(28))
             }
             startActivity(intent)
         }
 
-        // 今日の日付を表示
-        binding.todayText.setText(Functions.getTodayString())
         init()
     }
 
-    @SuppressLint("WrongConstant")
+    @SuppressLint("WrongConstant", "SimpleDateFormat")
     private fun init() {
+        // プログレスバー用オーバーレイを表示
+        binding.overlay.visibility = View.VISIBLE
+
+        //ヘッダーの日付を表示
+        binding.todayText.setText(Functions.getTodayString(showDiaryDate))
+
         binding.kibunsList.adapter = KibunsAdapter()
         binding.kibunsList.layoutManager = LinearLayoutManager(this, VERTICAL, false)
 
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        db.collection("kibuns").addSnapshotListener { resultsMap, exception ->
+
+        db.collection("kibuns").whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
             val results = resultsMap?.toObjects(Kibuns::class.java)
                 ?.sortedByDescending { kibuns -> kibuns.date }
-            val adapter = binding.kibunsList.adapter as KibunsAdapter
-            if (results != null) {
+
+            if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
+                binding.noDiaryLabel.visibility = View.VISIBLE
+            } else {
+                binding.noDiaryLabel.visibility = View.GONE
+
+                val adapter = binding.kibunsList.adapter as KibunsAdapter
                 adapter.addItems(results)
-            }
-            adapter.setOnItemClickListener(object: KibunsAdapter.OnItemClickListener {
-                override fun onClick(view: View, data: Kibuns) {
-                    val intent = Intent(this@MainActivity, KibunDetailActivity::class.java).apply {
-                        putExtra("text", data.text)
-                        putExtra("date", binding.todayText.text)
-                        putExtra("name", data.name)
-                        putExtra("kibun", data.kibun)
-                        putExtra("time", Functions.getTimeString(data.time))
-                        putExtra("image", data.image)
-                        putExtra("userId", data.user_id)
+                adapter.setOnItemClickListener(object : KibunsAdapter.OnItemClickListener {
+                    override fun onClick(view: View, data: Kibuns) {
+                        val intent =
+                            Intent(this@MainActivity, KibunDetailActivity::class.java).apply {
+                                putExtra("text", data.text)
+                                putExtra("date", binding.todayText.text)
+                                putExtra("name", data.name)
+                                putExtra("kibun", data.kibun)
+                                putExtra("time", Functions.getTimeString(data.time))
+                                putExtra("image", data.image)
+                                putExtra("userId", data.user_id)
+                            }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
-                }
-            })
+                })
+            }
 
             // プログレスバー非表示
             binding.overlay.visibility = View.GONE
             binding.progressbar.visibility = View.GONE
+        }
+
+        // 1日戻るボタンタップ
+        binding.leftButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            calendar.time = showDiaryDate
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+            showDiaryDate = calendar.time
+            binding.rightButton.isClickable = true
+            binding.rightButton.isClickable = true
+            binding.rightButton.setBackgroundResource(R.drawable.arrow_r)
+            init()
+        }
+
+        // 1日進むボタンタップ
+        binding.rightButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            calendar.time = showDiaryDate
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+            showDiaryDate = calendar.time
+            binding.rightButton.isClickable = true
+            if (showDiaryDate == Date()) {  // 表示してる日付が今日ならそれ以上進めなくする
+                binding.rightButton.isClickable = false
+                binding.rightButton.setBackgroundResource(R.drawable.arrow_r_off)
+            }
+            init()
         }
 
         // タブボタン処理

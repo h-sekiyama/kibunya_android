@@ -11,7 +11,9 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
@@ -71,14 +73,26 @@ class SmsSendCompleteActivity: AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = task.result?.user
+
+                    var name: String
+                    if (binding.nameInput.text.toString() == "") {
+                        name = "名無しの猫ちゃん"
+                    } else {
+                        name = binding.nameInput.text.toString()
+                    }
+
                     // 新規ユーザー登録
                     val db = FirebaseFirestore.getInstance()
                     db.collection("users")
                         .document(user!!.uid)
-                        .set(Users(binding.nameInput.text.toString()))
+                        .set(Users(name))
                         .addOnSuccessListener {
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
+                            val user = auth.currentUser
+                            val userProfileChangeRequest = UserProfileChangeRequest.Builder().setDisplayName(name).build()
+                            user!!.updateProfile(userProfileChangeRequest).addOnCompleteListener {
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                            }
                         }.addOnFailureListener { e ->
                             Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                         }
