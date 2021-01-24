@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kibunya</string>
+    <string name="app_name">家族ダイアリー</string>
     <string name="input_label">今日の日記</string>
     <string name="kibun_label0">さいこう！</string>
     <string name="kibun_label1">いいね〜</string>

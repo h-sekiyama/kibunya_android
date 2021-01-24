@@ -20,7 +20,35 @@ buildscript {
     }
 }
 
+gradle.taskGraph.beforeTask { Task task ->
+    if (task.name ==~ /process.*GoogleServices/) {
+        android.applicationVariants.all { variant ->
+            if (task.name ==~ /(?i)processDev.*GoogleServices/) {
+                copy {
+                    from "src/debug"
+                    into "."
+                    include "google-services.json"
+                }
+            } else {
+                copy {
+                    from "src/release"
+                    into "."
+                    include "google-services.json"
+                }
+            }
+        }
+    }
+}
+
 android {
+    signingConfigs {
+        config {
+            storeFile file('/Users/user/sites/kibunya_android/temp/KazokuDiary.jks')
+            storePassword 'iigyuxs8yati'
+            keyAlias 'key0'
+            keyPassword 'iigyuxs8yati'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -34,11 +62,14 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
         debug {
             debuggable true
             minifyEnabled false
+            applicationIdSuffix '.debug'
         }
     }
     dataBinding {
