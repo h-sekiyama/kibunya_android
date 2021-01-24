@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +14,6 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
@@ -52,6 +52,10 @@ class SmsSendCompleteActivity: AppCompatActivity() {
 
         // 登録 or ログイン処理
         binding.registrationOrLoginButton.setOnClickListener {
+            // プログレスバー非表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             // 認証IDをPreferenceから取得
             val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
             val verificationID: String? = dataStore.getString(getString(R.string.family_diary_verificationId), "")
@@ -87,6 +91,10 @@ class SmsSendCompleteActivity: AppCompatActivity() {
                         .document(user!!.uid)
                         .set(Users(name))
                         .addOnSuccessListener {
+                            // プログレスバー非表示
+                            binding.overlay.visibility = View.GONE
+                            binding.progressbar.visibility = View.GONE
+
                             val user = auth.currentUser
                             val userProfileChangeRequest = UserProfileChangeRequest.Builder().setDisplayName(name).build()
                             user!!.updateProfile(userProfileChangeRequest).addOnCompleteListener {
@@ -94,9 +102,17 @@ class SmsSendCompleteActivity: AppCompatActivity() {
                                 startActivity(intent)
                             }
                         }.addOnFailureListener { e ->
+                            // プログレスバー非表示
+                            binding.overlay.visibility = View.GONE
+                            binding.progressbar.visibility = View.GONE
+
                             Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                         }
                 } else {
+                    // プログレスバー非表示
+                    binding.overlay.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
+
                     Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                 }
             }

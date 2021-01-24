@@ -1,67 +1,90 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/background"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backGround"
-        android:gravity="center_horizontal"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/sign_up_by_mail_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="40dp"
-            android:text="@string/sms_send_complete_label"
-            android:textColor="@color/text"
-            android:textSize="16sp" />
-        <EditText
-            android:id="@+id/credential_code_input"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/background"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:padding="20dp"
-            android:layout_marginBottom="6dp"
-            android:maxLines="1"
-            android:hint="認証コード"
-            android:textColor="@color/text"
-            android:inputType="number"
-            android:background="@drawable/round_border_radius_30" />
-        <EditText
-            android:id="@+id/name_input"
+            android:layout_height="match_parent"
+            android:background="@color/backGround"
+            android:gravity="center_horizontal"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/sign_up_by_mail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="40dp"
+                android:text="@string/sms_send_complete_label"
+                android:textColor="@color/text"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/credential_code_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="20dp"
+                android:layout_marginBottom="6dp"
+                android:maxLines="1"
+                android:hint="認証コード"
+                android:textColor="@color/text"
+                android:inputType="number"
+                android:background="@drawable/round_border_radius_30" />
+            <EditText
+                android:id="@+id/name_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="20dp"
+                android:layout_marginBottom="6dp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:hint="なまえ（新規登録の場合）"
+                android:textColor="@color/text"
+                android:background="@drawable/round_border_radius_30" />
+            <!-- ログインボタン -->
+            <Button
+                android:id="@+id/registration_or_login_button"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/registration_or_login_button"
+                android:enabled="false"
+                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
+            <TextView
+                android:id="@+id/to_registration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to_registration_label"
+                android:textSize="16dp"
+                android:textColor="@color/text" />
+        </LinearLayout>
+
+        <!-- オーバーレイ -->
+        <View
+            android:id="@+id/overlay"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:padding="20dp"
-            android:layout_marginBottom="6dp"
-            android:inputType="text"
-            android:maxLines="1"
-            android:hint="なまえ（新規登録の場合）"
-            android:textColor="@color/text"
-            android:background="@drawable/round_border_radius_30" />
-        <!-- ログインボタン -->
-        <Button
-            android:id="@+id/registration_or_login_button"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_margin="20dp"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:text="@string/registration_or_login_button"
-            android:enabled="false"
-            android:background="@drawable/shape_rounded_corners_disabled_30dp" />
-        <TextView
-            android:id="@+id/to_registration"
-            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:visibility="gone"
+            android:alpha="0.7" />
+
+        <!-- プログレスバー -->
+        <ProgressBar android:id="@+id/progressbar"
             android:layout_height="wrap_content"
-            android:text="@string/to_registration_label"
-            android:textSize="16dp"
-            android:textColor="@color/text" />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar" />
+
+    </FrameLayout>
 </layout>

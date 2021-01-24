@@ -10,14 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.nifcloud.mbaas.core.NCMBInstallation
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
-import com.sekky.kibunya.Login.SignUpActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityViewFamilyListBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import org.json.JSONArray
 
 class ViewFamilyListActivity: AppCompatActivity() {
 
@@ -67,6 +67,11 @@ class ViewFamilyListActivity: AppCompatActivity() {
                         binding.runawayButton.visibility = View.GONE
                         binding.noFamilyLabel.visibility = View.VISIBLE
                     }
+
+                    // ニフクラから家族情報を削除
+                    val installation = NCMBInstallation.getCurrentInstallation()
+                    installation.channels = JSONArray("[]")
+                    installation.saveInBackground()
                 }
                 .setNegativeButton("しない") { dialog, _ ->
                     dialog.dismiss()

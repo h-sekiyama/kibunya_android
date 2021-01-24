@@ -68,6 +68,10 @@ class ChangeProfileActivity: AppCompatActivity() {
 
         // 保存ボタンタップ
         binding.profileChangeButton.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             saveProfile(currentUser, imageRef)
         }
 
@@ -214,6 +218,10 @@ class ChangeProfileActivity: AppCompatActivity() {
                             }
                         }.addOnFailureListener {
                             Functions.showAlertOneButton(this@ChangeProfileActivity, "エラー", it.message.toString())
+                        }.addOnCompleteListener {
+                            // プログレスバー非表示
+                            binding.overlay.visibility = View.GONE
+                            binding.progressbar.visibility = View.GONE
                         }
                     }
                     false -> Functions.showAlertOneButton(

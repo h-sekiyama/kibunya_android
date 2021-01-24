@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
@@ -54,11 +55,19 @@ class EmailLoginActivity: AppCompatActivity() {
         })
         // ログインボタンタップ
         binding.loginButton.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             val emailText = binding.mailInput.text.toString()
             val passText = binding.passwordInput.text.toString()
 
             auth.signInWithEmailAndPassword(emailText, passText)
                 .addOnCompleteListener(this) { task ->
+                    // プログレスバー非表示
+                    binding.overlay.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
+
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                         user!!.reload()

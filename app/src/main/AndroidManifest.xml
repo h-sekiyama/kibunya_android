@@ -19,6 +19,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name="com.nifcloud.mbaas.core.NCMBFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- プッシュ通知タップ時に起動するActivityの設定 ※必須の設定 -->
+        <meta-data android:name="openPushStartActivity" android:value=".Login.SignUpActivity"/>
+        <!-- 通知エリアに表示されるアイコンの設定 -->
+        <meta-data android:name="smallIcon" android:resource="@drawable/app_icon"/>
+        <!-- 通知エリアにプッシュ通知を複数表示する設定　0:最新のみ表示 , 1:複数表示 -->
+        <meta-data android:name="notificationOverlap" android:value="0"/>
+
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity android:name=".Login.SignUpActivity"

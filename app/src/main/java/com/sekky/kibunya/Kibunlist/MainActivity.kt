@@ -1,7 +1,9 @@
 package com.sekky.kibunya.Kibunlist
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.nifcloud.mbaas.core.*
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
@@ -22,6 +25,8 @@ import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
 import com.sekky.kibunya.databinding.ActivityViewFamilyListBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -47,6 +52,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // ニフクラに登録するdeviceTokenをPreferenceに保存しておく
+        val installation = NCMBInstallation.getCurrentInstallation()
+        val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
+        val editor = dataStore.edit()
+        editor.putString(getString(R.string.device_Token_key), installation.deviceToken)
+        editor.apply()
+
         init()
     }
 
@@ -62,20 +74,27 @@ class MainActivity : AppCompatActivity() {
         binding.kibunsList.layoutManager = LinearLayoutManager(this, VERTICAL, false)
 
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
         // まず家族リストを作る
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         val familyRef = db.collection("families")
         val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
         var familyList: List<String> = listOf(user.uid)
+        var familyId = ""
 
         containsMyUidDocument.get().addOnSuccessListener { resultMap ->
-            if (resultMap.documents.size != 0) {    // 家族が1人もいない
+            if (resultMap.documents.size != 0) {    // 家族がいる場合
                 familyList = resultMap.documents[0].get("user_id") as List<String>
             }
 
             db.collection("kibuns").whereIn("user_id", familyList).whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
+                if (resultMap.documents.size != 0) {
+                    // 家族登録状況を元にニフクラにfamilyIdを登録
+                    familyId = resultMap.documents[0].id
+                    val installation = NCMBInstallation.getCurrentInstallation()
+                    installation.channels = JSONArray("[${familyId}]")
+                    installation.saveInBackground()
+                }
                 val results = resultsMap?.toObjects(Kibuns::class.java)
                     ?.sortedByDescending { kibuns -> kibuns.date }
 

@@ -2,215 +2,238 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/background"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/headerBackground"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/today_text"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="@string/input_label"
-                android:textSize="24sp"
-                android:gravity="center"
-                android:textColor="@color/text"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/backGround"
-            tools:context="com.mtzack.chat.MainActivity"
-            android:layout_marginBottom="90dp">
+            android:orientation="vertical">
 
-            <!-- 気分アイコン・ボタン -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:paddingTop="10dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:layout_height="60dp"
+                android:background="@color/headerBackground"
                 android:orientation="horizontal">
-                
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/kibun_button0"
-                        android:layout_width="70dp"
-                        android:layout_height="51dp"
-                        android:layout_margin="1dp"
-                        android:src="@drawable/kibun_icon0_off" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kibun_label0"
-                        android:textSize="12sp"
-                        android:textColor="@color/text"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/kibun_button1"
-                        android:layout_width="70dp"
-                        android:layout_height="51dp"
-                        android:layout_margin="1dp"
-                        android:src="@drawable/kibun_icon1_off" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kibun_label1"
-                        android:textSize="12sp"
-                        android:textColor="@color/text"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/kibun_button2"
-                        android:layout_width="70dp"
-                        android:layout_height="51dp"
-                        android:layout_margin="1dp"
-                        android:src="@drawable/kibun_icon2_off" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kibun_label2"
-                        android:textSize="12sp"
-                        android:textColor="@color/text"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/kibun_button3"
-                        android:layout_width="70dp"
-                        android:layout_height="51dp"
-                        android:layout_margin="1dp"
-                        android:src="@drawable/kibun_icon3_off" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kibun_label3"
-                        android:textSize="12sp"
-                        android:textColor="@color/text"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-                    <ImageView
-                        android:id="@+id/kibun_button4"
-                        android:layout_width="70dp"
-                        android:layout_height="51dp"
-                        android:layout_margin="1dp"
-                        android:src="@drawable/kibun_icon4_off" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/kibun_label4"
-                        android:textSize="12sp"
-                        android:textColor="@color/text"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/today_text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/input_label"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:textColor="@color/text"
+                    android:layout_weight="1"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/backGround"
+                tools:context="com.mtzack.chat.MainActivity"
+                android:layout_marginBottom="90dp">
+
+                <!-- 気分アイコン・ボタン -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/kibun_button0"
+                            android:layout_width="70dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="1dp"
+                            android:src="@drawable/kibun_icon0_off" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kibun_label0"
+                            android:textSize="12sp"
+                            android:textColor="@color/text"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/kibun_button1"
+                            android:layout_width="70dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="1dp"
+                            android:src="@drawable/kibun_icon1_off" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kibun_label1"
+                            android:textSize="12sp"
+                            android:textColor="@color/text"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/kibun_button2"
+                            android:layout_width="70dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="1dp"
+                            android:src="@drawable/kibun_icon2_off" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kibun_label2"
+                            android:textSize="12sp"
+                            android:textColor="@color/text"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/kibun_button3"
+                            android:layout_width="70dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="1dp"
+                            android:src="@drawable/kibun_icon3_off" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kibun_label3"
+                            android:textSize="12sp"
+                            android:textColor="@color/text"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <ImageView
+                            android:id="@+id/kibun_button4"
+                            android:layout_width="70dp"
+                            android:layout_height="51dp"
+                            android:layout_margin="1dp"
+                            android:src="@drawable/kibun_icon4_off" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kibun_label4"
+                            android:textSize="12sp"
+                            android:textColor="@color/text"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/text_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="300"
+                        android:textSize="12sp"
+                        android:layout_gravity="right"
+                        android:layout_marginEnd="30dp"
+                        android:textColor="@color/button_disabled" />
+
+                    <!-- 日記本文入力テキストボックス -->
+                    <com.daasuu.bl.BubbleLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="-14dp"
+                        app:bl_bubbleColor="@color/white"
+                        app:bl_arrowDirection="top"
+                        app:bl_arrowHeight="20dp"
+                        app:bl_arrowPosition="180dp"
+                        app:bl_arrowWidth="16dp"
+                        app:bl_cornersRadius="16dp"
+                        app:bl_strokeColor="@color/border"
+                        app:bl_strokeWidth="4dp">
+
+                        <EditText
+                            android:id="@+id/kibun_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="14sp"
+                            android:layout_margin="8dp"
+                            android:maxLines="1"
+                            tools:text="ほげほげ"
+                            android:background="@color/white"
+                            android:gravity="top" />
+
+                    </com.daasuu.bl.BubbleLayout>
+                </LinearLayout>
+                <!-- 日記画像選択 -->
+                <ImageView
+                    android:id="@+id/kibun_image_select"
+                    android:layout_width="140dp"
+                    android:layout_height="112dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/diary_image_icon" />
+                <!-- 日記投稿ボタン -->
+                <Button
+                    android:id="@+id/kibun_send_button"
+                    android:layout_width="200dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:text="@string/send_kibun_text_label"
+                    android:enabled="false"
+                    android:background="@drawable/shape_rounded_corners_disabled_30dp" />
                 <TextView
-                    android:id="@+id/text_count"
+                    android:id="@+id/send_complete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="300"
-                    android:textSize="12sp"
-                    android:layout_gravity="right"
-                    android:layout_marginEnd="30dp"
-                    android:textColor="@color/button_disabled" />
-
-                <!-- 日記本文入力テキストボックス -->
-                <com.daasuu.bl.BubbleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="-14dp"
-                    app:bl_bubbleColor="@color/white"
-                    app:bl_arrowDirection="top"
-                    app:bl_arrowHeight="20dp"
-                    app:bl_arrowPosition="180dp"
-                    app:bl_arrowWidth="16dp"
-                    app:bl_cornersRadius="16dp"
-                    app:bl_strokeColor="@color/border"
-                    app:bl_strokeWidth="4dp">
-
-                    <EditText
-                        android:id="@+id/kibun_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="14sp"
-                        android:layout_margin="8dp"
-                        android:maxLines="1"
-                        tools:text="ほげほげ"
-                        android:background="@color/white"
-                        android:gravity="top" />
-
-                </com.daasuu.bl.BubbleLayout>
+                    android:text="@string/send_kibun_complete"
+                    android:textColor="@color/text"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
             </LinearLayout>
-            <!-- 日記画像選択 -->
-            <ImageView
-                android:id="@+id/kibun_image_select"
-                android:layout_width="140dp"
-                android:layout_height="112dp"
-                android:layout_gravity="center"
-                android:layout_margin="12dp"
-                android:src="@drawable/diary_image_icon" />
-            <!-- 日記投稿ボタン -->
-            <Button
-                android:id="@+id/kibun_send_button"
-                android:layout_width="200dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:text="@string/send_kibun_text_label"
-                android:enabled="false"
-                android:background="@drawable/shape_rounded_corners_disabled_30dp" />
-            <TextView
-                android:id="@+id/send_complete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/send_kibun_complete"
-                android:textColor="@color/text"
-                android:layout_marginTop="2dp"
-                android:layout_gravity="center"
-                android:visibility="gone" />
+
+            <!-- タブ -->
+            <include layout="@layout/tab_layout" android:id="@+id/tab_layout" />
+
         </LinearLayout>
 
-        <!-- タブ -->
-        <include layout="@layout/tab_layout" android:id="@+id/tab_layout" />
+        <!-- オーバーレイ -->
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:visibility="gone"
+            android:alpha="0.7" />
 
-    </LinearLayout>
+        <!-- プログレスバー -->
+        <ProgressBar android:id="@+id/progressbar"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar" />
+
+    </FrameLayout>
 </layout>

@@ -40,4 +40,5 @@
     <string name="runaway_button_label">家出する(家族解除)</string>
     <string name="no_family">まだ家族が1人もいません</string>
     <string name="no_diary">誰も日記を書いていません</string>
+    <string name="device_Token_key">Family_diary_device_token_key</string>
 </resources>

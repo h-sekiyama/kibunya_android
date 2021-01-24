@@ -9,6 +9,16 @@ repositories {
         url 'https://maven.google.com'
     }
 }
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.2"
+        classpath 'com.google.gms:google-services:4.3.4'
+    }
+}
 
 android {
     compileSdkVersion 29
@@ -70,7 +80,8 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.daasuu:BubbleLayout:1.0.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
-    api files('libs/NCMB.jar')
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
+    implementation 'com.google.android.gms:play-services-base:17.3.0'
+    implementation 'com.google.code.gson:gson:2.3.1'
+    implementation files('libs/NCMB.jar')
 }

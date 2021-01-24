@@ -7,12 +7,17 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.nifcloud.mbaas.core.NCMB
+import com.nifcloud.mbaas.core.NCMBInstallation
+import com.sekky.kibunya.BuildConfig
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
@@ -24,6 +29,8 @@ import java.util.concurrent.TimeUnit
 class SignUpActivity: AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var overRayView: View
+    private lateinit var progressBar: ProgressBar
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,15 +38,26 @@ class SignUpActivity: AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // 既にログイン済みならメイン画面に遷移する
-        val isLogin: Boolean = auth.currentUser != null
-        if (isLogin) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        // APIキーの設定とSDK初期化、配信端末の登録
+        if (BuildConfig.DEBUG) {
+            NCMB.initialize(this.applicationContext, "362179601d478e841d36e745ba1f4516cd0bcfb5d0123a1bd5d0960dcdd3dd61", "69c1601ca32cd5b0581bde8fda9fa3a0e69ec34a92f321fa7122aca63fe681eb");
+        } else {
+            NCMB.initialize(this.applicationContext, "23cdc4478a47767b5f49bcfa80b33aa8087f5d4ad96192a457489ccac91a4721", "645eb370a2b644caae9d229392ac3b654593913d2f996040c8751027453f0fa2");
+        }
+
+        // メール認証済みか電話番号認証済みなら即メイン画面へ遷移
+        if (auth.currentUser != null) {
+            if (auth.currentUser!!.isEmailVerified || auth.currentUser!!.phoneNumber != null) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         val binding: ActivitySignUpBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
+
+        overRayView = binding.overlay
+        progressBar = binding.progressbar
 
         // 背景タップでキーボードを隠すための処理
         Functions.addBackgroundFocus(binding.background, this)
@@ -104,6 +122,10 @@ class SignUpActivity: AppCompatActivity() {
         // メールアドレスで登録処理
         binding.registrationButton.setOnClickListener {
 
+            // プログレスバー表示
+            overRayView.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
+
             val nameText = binding.nameInput.text.toString()
             val emailText = binding.mailInput.text.toString()
             val passText = binding.passwordInput.text.toString()
@@ -128,16 +150,32 @@ class SignUpActivity: AppCompatActivity() {
                                         .document(user.uid)
                                         .set(hashMapOf("name" to nameText))
                                         .addOnSuccessListener {
+                                            // プログレスバー非表示
+                                            overRayView.visibility = View.GONE
+                                            progressBar.visibility = View.GONE
+
                                             val intent = Intent(this, SendEmailActivity::class.java)
                                             startActivity(intent)
                                         }.addOnFailureListener { e ->
+                                            // プログレスバー非表示
+                                            overRayView.visibility = View.GONE
+                                            progressBar.visibility = View.GONE
+
                                             Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                                         }
                                 } else {
+                                    // プログレスバー非表示
+                                    overRayView.visibility = View.GONE
+                                    progressBar.visibility = View.GONE
+
                                     Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                                 }
                             }
                     } else {
+                        // プログレスバー非表示
+                        overRayView.visibility = View.GONE
+                        progressBar.visibility = View.GONE
+
                         Functions.showAlertOneButton(this, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                     }
                 }
@@ -151,6 +189,10 @@ class SignUpActivity: AppCompatActivity() {
 
         // 電話番号認証ボタンタップ
         binding.sendAuthentication.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             val formattedPhoneNumber: String = "+81" + binding.telInput.text.drop(1)
             val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(formattedPhoneNumber)
@@ -185,8 +227,12 @@ class SignUpActivity: AppCompatActivity() {
                     } else {
                         Functions.showAlertOneButton(this@SignUpActivity, "エラー", Functions.getJapaneseErrorMessage(task.exception!!.message.toString()))
                     }
+                    overRayView.visibility = View.GONE
+                    progressBar.visibility = View.GONE
             }.addOnFailureListener { e ->
-                Functions.showAlertOneButton(this@SignUpActivity, "エラー", e.toString())
+                    overRayView.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    Functions.showAlertOneButton(this@SignUpActivity, "エラー", e.toString())
             }
         }
 
@@ -199,6 +245,8 @@ class SignUpActivity: AppCompatActivity() {
             } else {
                 Functions.showAlertOneButton(this@SignUpActivity, "エラー", e.toString())
             }
+            overRayView.visibility = View.GONE
+            progressBar.visibility = View.GONE
         }
 
         // 認証コードをSMSで送信完了
@@ -206,6 +254,8 @@ class SignUpActivity: AppCompatActivity() {
             verificationId: String,
             token: PhoneAuthProvider.ForceResendingToken
         ) {
+            overRayView.visibility = View.GONE
+            progressBar.visibility = View.GONE
             // 認証IDをPreferenceに保存しておく
             val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
             val editor = dataStore.edit()

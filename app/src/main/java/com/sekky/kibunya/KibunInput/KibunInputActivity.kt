@@ -9,8 +9,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.Timestamp
@@ -18,9 +20,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.nifcloud.mbaas.core.NCMBInstallation
+import com.nifcloud.mbaas.core.NCMBPush
+import com.nifcloud.mbaas.core.NCMBQuery
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Other.FamilyAdapter
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
@@ -31,18 +37,37 @@ import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 class KibunInputActivity: AppCompatActivity() {
 
     private val binding: ActivityKibunInputBinding by lazy {
-        DataBindingUtil.setContentView<ActivityKibunInputBinding>(this, R.layout.activity_kibun_input)
+        DataBindingUtil.setContentView<ActivityKibunInputBinding>(
+            this,
+            R.layout.activity_kibun_input
+        )
     }
 
     // 選択中の気分
     private var selectedKibun: Int? = null
     private var isExsistSendImage: Boolean = false
 
+    // 家族ID
+    private var familyId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 家族IDの取得
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val familyRef = db.collection("families")
+        val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
+        containsMyUidDocument.get().addOnSuccessListener { resultMap ->
+            if (resultMap.documents.size != 0) {    // 家族が1人もいない
+                familyId = resultMap.documents[0].id
+            }
+        }
 
         init()
     }
@@ -129,6 +154,10 @@ class KibunInputActivity: AppCompatActivity() {
 
         // 「これでおくる」ボタンタップ
         binding.kibunSendButton.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             val auth = FirebaseAuth.getInstance()
             val user = auth.currentUser
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -173,26 +202,62 @@ class KibunInputActivity: AppCompatActivity() {
     }
 
     // 日記の更新
-    private fun sendDiary(user: FirebaseUser?, db: FirebaseFirestore, documentId: String, imageUrl: String = "") {
+    private fun sendDiary(
+        user: FirebaseUser?,
+        db: FirebaseFirestore,
+        documentId: String,
+        imageUrl: String = ""
+    ) {
         db.collection("kibuns").document(documentId).set(
             Kibuns(
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日")),
-            documentId,
-            imageUrl,
-            selectedKibun,
-            user!!.displayName,
-            binding.kibunEditText.text.toString(),
-            Timestamp.now(),
-            user.uid
-        )
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日")),
+                documentId,
+                imageUrl,
+                selectedKibun,
+                user!!.displayName,
+                binding.kibunEditText.text.toString(),
+                Timestamp.now(),
+                user.uid
+            )
         ).addOnSuccessListener {
             binding.sendComplete.visibility = View.VISIBLE
             binding.kibunEditText.text.clear()
             binding.kibunSendButton.isEnabled = false
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
             binding.kibunImageSelect.setImageResource(R.drawable.diary_image_icon)
+
+            if (familyId != "") {   // 家族がいる場合PUSH通知を送信する
+                val push = NCMBPush()
+                // i/A共通の設定
+                push.message = "${user.displayName}が日記を書きました"
+
+                // 送る対象を家族に限定
+                val installation = NCMBInstallation.getCurrentInstallation()
+                val query = NCMBQuery<NCMBInstallation>("installation")
+                query.whereEqualTo("channels", familyId)
+                query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
+                push.setSearchCondition(query)
+
+                // iOS用の設定
+                push.badgeIncrementFlag = false
+                push.sound = "default"
+                push.category = "CATEGORY001"
+                // Android用の設定
+                push.action = "com.sample.pushsample.RECEIVE_PUSH"
+                push.title = "家族ダイアリー"
+                push.dialog = true
+                push.sendInBackground { e ->
+                    if (e != null) {
+                        // エラー処理
+                    }
+                }
+            }
         }.addOnFailureListener {
-            Log.d("error", it.toString())
+            Functions.showAlertOneButton(this, "エラー", it.toString())
+        }.addOnCompleteListener {
+            // プログレスバー非表示
+            binding.overlay.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
         }
     }
 

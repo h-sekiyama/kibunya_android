@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.nifcloud.mbaas.core.NCMBInstallation
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Families
 import com.sekky.kibunya.KibunInput.KibunInputActivity
@@ -18,6 +19,7 @@ import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityAddFamilyBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import org.json.JSONArray
 
 class AddFamilyActivity: AppCompatActivity() {
 
@@ -61,11 +63,19 @@ class AddFamilyActivity: AppCompatActivity() {
 
         // 検索ボタンタップ
         binding.searchButton.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             searchUser(user!!)
         }
 
         // 家族追加ボタンタップ
         binding.addFamilyButton.setOnClickListener {
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
+
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
             val familyRef = db.collection("families")
@@ -78,6 +88,11 @@ class AddFamilyActivity: AppCompatActivity() {
                         db.collection("families").document().set(
                             Families(listOf(binding.userIdInput.text.toString(), user.uid))
                         ).addOnSuccessListener {
+                            // 家族登録状況を元にニフクラにfamilyIdを登録
+                            val installation = NCMBInstallation.getCurrentInstallation()
+                            installation.channels = JSONArray("[${db.collection("families").document().id}]")
+                            installation.saveInBackground()
+
                             updateActionAfterAddFamily()
                         }.addOnFailureListener {
                             Functions.showAlertOneButton(
@@ -85,6 +100,10 @@ class AddFamilyActivity: AppCompatActivity() {
                                 "エラー",
                                 it.message.toString()
                             )
+                        }.addOnCompleteListener {
+                            // プログレスバー非表示
+                            binding.overlay.visibility = View.GONE
+                            binding.progressbar.visibility = View.GONE
                         }
                     } else if (result1.count() != 0 && result2.count() != 0) {   // どっちも家族がいる時
                         if (result1.documents[0].id == result2.documents[0].id) {    // 既に家族になってる時
@@ -106,6 +125,9 @@ class AddFamilyActivity: AppCompatActivity() {
                                     updateActionAfterAddFamily()
                                 }
                         }
+                        // プログレスバー非表示
+                        binding.overlay.visibility = View.GONE
+                        binding.progressbar.visibility = View.GONE
                     } else if (result1.count() != 0 || result2.count() != 0) {
                         if (result1.count() != 0 && result2.count() == 0) {  // 自分にだけ家族がいる時
                             db.collection("families")
@@ -119,12 +141,21 @@ class AddFamilyActivity: AppCompatActivity() {
                                         "エラー",
                                         it.message.toString()
                                     )
+                                }.addOnCompleteListener {
+                                    // プログレスバー非表示
+                                    binding.overlay.visibility = View.GONE
+                                    binding.progressbar.visibility = View.GONE
                                 }
                         } else if (result1.count() == 0 && result2.count() != 0) {  // 相手にだけ家族がいる時
                             db.collection("families")
                                 .document(result2.documents[0].id)
                                 .update("user_id", FieldValue.arrayUnion(user.uid))
                                 .addOnSuccessListener {
+                                    // 家族登録状況を元にニフクラにfamilyIdを登録
+                                    val installation = NCMBInstallation.getCurrentInstallation()
+                                    installation.channels = JSONArray("[${db.collection("families").document().id}]")
+                                    installation.saveInBackground()
+
                                     updateActionAfterAddFamily()
                                 }.addOnFailureListener {
                                     Functions.showAlertOneButton(
@@ -132,6 +163,10 @@ class AddFamilyActivity: AppCompatActivity() {
                                         "エラー",
                                         it.message.toString()
                                     )
+                                }.addOnCompleteListener {
+                                    // プログレスバー非表示
+                                    binding.overlay.visibility = View.GONE
+                                    binding.progressbar.visibility = View.GONE
                                 }
                         }
                     }
@@ -192,6 +227,10 @@ class AddFamilyActivity: AppCompatActivity() {
         if (binding.userIdInput.text.toString() == user.uid ?: "") {
             binding.searchedUserName.text = getString(R.string.my_own_user_id_label)
             binding.searchedUserName.visibility = View.VISIBLE
+
+            // プログレスバー表示
+            binding.overlay.visibility = View.VISIBLE
+            binding.progressbar.visibility = View.VISIBLE
         } else {
             val docRef = db.collection("users").document(binding.userIdInput.text.toString())
             docRef.get()
@@ -201,6 +240,10 @@ class AddFamilyActivity: AppCompatActivity() {
                     binding.searchedUserName.visibility = View.VISIBLE
                     binding.addFamilyButton.isEnabled = true
                     binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
+                }.addOnCompleteListener {
+                    // プログレスバー非表示
+                    binding.overlay.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
                 }
         }
     }
