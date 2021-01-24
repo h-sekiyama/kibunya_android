@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -64,4 +70,7 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
     implementation 'com.daasuu:BubbleLayout:1.0.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    api files('libs/NCMB.jar')
 }
