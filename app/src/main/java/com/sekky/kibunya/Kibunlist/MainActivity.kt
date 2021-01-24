@@ -9,15 +9,18 @@ import android.view.View
 import android.widget.LinearLayout.VERTICAL
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.Other.AddFamilyActivity
+import com.sekky.kibunya.Other.FamilyAdapter
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
+import com.sekky.kibunya.databinding.ActivityViewFamilyListBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -60,34 +63,47 @@ class MainActivity : AppCompatActivity() {
 
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        db.collection("kibuns").whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
-            val results = resultsMap?.toObjects(Kibuns::class.java)
-                ?.sortedByDescending { kibuns -> kibuns.date }
+        // まず家族リストを作る
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val familyRef = db.collection("families")
+        val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
+        var familyList: List<String> = listOf(user.uid)
 
-            if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
-                binding.noDiaryLabel.visibility = View.VISIBLE
-            } else {
-                binding.noDiaryLabel.visibility = View.GONE
-
-                val adapter = binding.kibunsList.adapter as KibunsAdapter
-                adapter.addItems(results)
-                adapter.setOnItemClickListener(object : KibunsAdapter.OnItemClickListener {
-                    override fun onClick(view: View, data: Kibuns) {
-                        val intent =
-                            Intent(this@MainActivity, KibunDetailActivity::class.java).apply {
-                                putExtra("text", data.text)
-                                putExtra("date", binding.todayText.text)
-                                putExtra("name", data.name)
-                                putExtra("kibun", data.kibun)
-                                putExtra("time", Functions.getTimeString(data.time))
-                                putExtra("image", data.image)
-                                putExtra("userId", data.user_id)
-                            }
-                        startActivity(intent)
-                    }
-                })
+        containsMyUidDocument.get().addOnSuccessListener { resultMap ->
+            if (resultMap.documents.size != 0) {    // 家族が1人もいない
+                familyList = resultMap.documents[0].get("user_id") as List<String>
             }
 
+            db.collection("kibuns").whereIn("user_id", familyList).whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
+                val results = resultsMap?.toObjects(Kibuns::class.java)
+                    ?.sortedByDescending { kibuns -> kibuns.date }
+
+                if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
+                    binding.noDiaryLabel.visibility = View.VISIBLE
+                } else {
+                    binding.noDiaryLabel.visibility = View.GONE
+
+                    val adapter = binding.kibunsList.adapter as KibunsAdapter
+                    adapter.addItems(results)
+                    adapter.setOnItemClickListener(object : KibunsAdapter.OnItemClickListener {
+                        override fun onClick(view: View, data: Kibuns) {
+                            val intent =
+                                Intent(this@MainActivity, KibunDetailActivity::class.java).apply {
+                                    putExtra("text", data.text)
+                                    putExtra("date", binding.todayText.text)
+                                    putExtra("name", data.name)
+                                    putExtra("kibun", data.kibun)
+                                    putExtra("time", Functions.getTimeString(data.time))
+                                    putExtra("image", data.image)
+                                    putExtra("userId", data.user_id)
+                                }
+                            startActivity(intent)
+                        }
+                    })
+                }
+            }
+        }.addOnCompleteListener {
             // プログレスバー非表示
             binding.overlay.visibility = View.GONE
             binding.progressbar.visibility = View.GONE
