@@ -191,7 +191,7 @@ class AddFamilyActivity: AppCompatActivity() {
                             "http://kazoku-diary?kazokuDiary=" + binding.myUserIdInput.text.toString() + "\n\n" +
                             "アプリをダウンロード\n" +
                             "iOS版：https://apps.apple.com/us/app/id1528947553\n\n" +
-                            "Android版：https://hogehoge.com"
+                            "Android版：https://play.google.com/store/apps/details?id=com.sekky.kibunya"
                 )
                 type = "text/plain"
             }
@@ -201,7 +201,7 @@ class AddFamilyActivity: AppCompatActivity() {
         }
 
         // タブボタン処理
-        binding.tabLayout.tab_button0.setImageResource(R.drawable.tab0_on)
+        binding.tabLayout.tab_button2.setImageResource(R.drawable.tab2_on)
         binding.tabLayout.tab_button0.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
