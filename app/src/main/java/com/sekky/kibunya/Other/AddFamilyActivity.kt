@@ -228,18 +228,23 @@ class AddFamilyActivity: AppCompatActivity() {
             binding.searchedUserName.text = getString(R.string.my_own_user_id_label)
             binding.searchedUserName.visibility = View.VISIBLE
 
-            // プログレスバー表示
-            binding.overlay.visibility = View.VISIBLE
-            binding.progressbar.visibility = View.VISIBLE
+            // プログレスバー非表示
+            binding.overlay.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
         } else {
             val docRef = db.collection("users").document(binding.userIdInput.text.toString())
             docRef.get()
                 .addOnSuccessListener { document ->
-                    // HITしたユーザー名を表示
-                    binding.searchedUserName.text = document.get("name").toString()
-                    binding.searchedUserName.visibility = View.VISIBLE
-                    binding.addFamilyButton.isEnabled = true
-                    binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
+                    if (document.data != null) {
+                        // HITしたユーザー名を表示
+                        binding.searchedUserName.text = document.get("name").toString()
+                        binding.searchedUserName.visibility = View.VISIBLE
+                        binding.addFamilyButton.isEnabled = true
+                        binding.addFamilyButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
+                    } else {
+                        binding.searchedUserName.text = "該当するユーザーがいません"
+                        binding.searchedUserName.visibility = View.VISIBLE
+                    }
                 }.addOnCompleteListener {
                     // プログレスバー非表示
                     binding.overlay.visibility = View.GONE

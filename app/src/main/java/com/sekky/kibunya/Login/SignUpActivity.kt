@@ -39,10 +39,10 @@ class SignUpActivity: AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // APIキーの設定とSDK初期化、配信端末の登録
-        if (BuildConfig.DEBUG) {
-            NCMB.initialize(this.applicationContext, "362179601d478e841d36e745ba1f4516cd0bcfb5d0123a1bd5d0960dcdd3dd61", "69c1601ca32cd5b0581bde8fda9fa3a0e69ec34a92f321fa7122aca63fe681eb");
+        if (BuildConfig.BUILD_TYPE == "debug") {
+            NCMB.initialize(this.applicationContext, "362179601d478e841d36e745ba1f4516cd0bcfb5d0123a1bd5d0960dcdd3dd61", "69c1601ca32cd5b0581bde8fda9fa3a0e69ec34a92f321fa7122aca63fe681eb")
         } else {
-            NCMB.initialize(this.applicationContext, "23cdc4478a47767b5f49bcfa80b33aa8087f5d4ad96192a457489ccac91a4721", "645eb370a2b644caae9d229392ac3b654593913d2f996040c8751027453f0fa2");
+            NCMB.initialize(this.applicationContext, "23cdc4478a47767b5f49bcfa80b33aa8087f5d4ad96192a457489ccac91a4721", "645eb370a2b644caae9d229392ac3b654593913d2f996040c8751027453f0fa2")
         }
 
         // メール認証済みか電話番号認証済みなら即メイン画面へ遷移

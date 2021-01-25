@@ -177,7 +177,6 @@
                             android:layout_height="match_parent"
                             android:textSize="14sp"
                             android:layout_margin="8dp"
-                            android:maxLines="1"
                             tools:text="ほげほげ"
                             android:background="@color/white"
                             android:gravity="top" />

@@ -234,12 +234,12 @@ class KibunInputActivity: AppCompatActivity() {
                 // 送る対象を家族に限定
                 val installation = NCMBInstallation.getCurrentInstallation()
                 val query = NCMBQuery<NCMBInstallation>("installation")
-                query.whereEqualTo("channels", familyId)
+                query.whereContainedIn("channels", listOf(familyId))
                 query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
                 push.setSearchCondition(query)
 
                 // iOS用の設定
-                push.badgeIncrementFlag = false
+                push.badgeIncrementFlag = true
                 push.sound = "default"
                 push.category = "CATEGORY001"
                 // Android用の設定

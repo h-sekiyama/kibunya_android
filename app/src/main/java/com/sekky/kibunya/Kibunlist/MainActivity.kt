@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                     installation.saveInBackground()
                 }
                 val results = resultsMap?.toObjects(Kibuns::class.java)
-                    ?.sortedByDescending { kibuns -> kibuns.date }
+                    ?.sortedByDescending { kibuns -> kibuns.time }
 
                 if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
                     binding.noDiaryLabel.visibility = View.VISIBLE

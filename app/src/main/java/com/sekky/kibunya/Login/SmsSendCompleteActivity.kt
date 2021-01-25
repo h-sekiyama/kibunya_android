@@ -77,29 +77,33 @@ class SmsSendCompleteActivity: AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = task.result?.user
-
-                    var name: String
-                    if (binding.nameInput.text.toString() == "") {
-                        name = "名無しの猫ちゃん"
+                    val name: String?
+                    name = if (binding.nameInput.text.toString() == "" && user!!.displayName == null) {
+                        "名無しの猫ちゃん"
+                    } else if (user!!.displayName != null) {
+                        user.displayName
                     } else {
-                        name = binding.nameInput.text.toString()
+                        binding.nameInput.text.toString()
                     }
 
                     // 新規ユーザー登録
                     val db = FirebaseFirestore.getInstance()
                     db.collection("users")
-                        .document(user!!.uid)
+                        .document(user.uid)
                         .set(Users(name))
                         .addOnSuccessListener {
                             // プログレスバー非表示
                             binding.overlay.visibility = View.GONE
                             binding.progressbar.visibility = View.GONE
 
-                            val user = auth.currentUser
-                            val userProfileChangeRequest = UserProfileChangeRequest.Builder().setDisplayName(name).build()
-                            user!!.updateProfile(userProfileChangeRequest).addOnCompleteListener {
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
+                            if (user.displayName != "") {
+                                val userProfileChangeRequest =
+                                    UserProfileChangeRequest.Builder().setDisplayName(name).build()
+                                user.updateProfile(userProfileChangeRequest)
+                                    .addOnCompleteListener {
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        startActivity(intent)
+                                    }
                             }
                         }.addOnFailureListener { e ->
                             // プログレスバー非表示
