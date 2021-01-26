@@ -52,7 +52,7 @@ class KibunsAdapter(
                 Glide.with(context!!)
                     .load(imageRef)
                     .placeholder(R.drawable.noimage)
-                    .signature(ObjectKey(System.currentTimeMillis()))
+//                    .signature(ObjectKey(System.currentTimeMillis()))
                     .into(holder.binding.userIcon)
             }.addOnFailureListener {
                 // 取得失敗したらデフォルト画像表示

@@ -146,6 +146,8 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
             }
+        }.addOnFailureListener {
+            Functions.showAlertOneButton(this, "エラー", it.toString())
         }.addOnCompleteListener {
             // プログレスバー非表示
             binding.overlay.visibility = View.GONE

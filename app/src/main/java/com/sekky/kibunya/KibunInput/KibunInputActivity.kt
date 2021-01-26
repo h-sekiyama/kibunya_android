@@ -83,7 +83,7 @@ class KibunInputActivity: AppCompatActivity() {
                 if (resultCode == RESULT_OK) {
                     Glide.with(this)
                         .load(result.uri)
-                        .signature(ObjectKey(System.currentTimeMillis()))
+//                        .signature(ObjectKey(System.currentTimeMillis()))
                         .into(binding.kibunImageSelect)
 
                     isExsistSendImage = true

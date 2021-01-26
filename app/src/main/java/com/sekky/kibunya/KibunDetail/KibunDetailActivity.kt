@@ -45,7 +45,7 @@ class KibunDetailActivity: AppCompatActivity() {
             Glide.with(this)
                 .load(imageRef)
                 .placeholder(R.drawable.noimage)
-                .signature(ObjectKey(System.currentTimeMillis()))
+//                .signature(ObjectKey(System.currentTimeMillis()))
                 .into(binding.userImage)
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
