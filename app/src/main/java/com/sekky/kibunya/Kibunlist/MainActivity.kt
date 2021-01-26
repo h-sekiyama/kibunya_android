@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                     installation.saveInBackground()
                 }
                 val results = resultsMap?.toObjects(Kibuns::class.java)
-                    ?.sortedByDescending { kibuns -> kibuns.time }
+                    ?.sortedByDescending { kibuns -> kibuns.time } ?: return@addSnapshotListener
 
                 if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
                     binding.noDiaryLabel.visibility = View.VISIBLE
