@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -18,12 +20,14 @@ import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Login.SignUpActivity
 import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.Other.FamilyAdapter
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
 import com.sekky.kibunya.databinding.ActivityViewFamilyListBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -105,6 +109,7 @@ class MainActivity : AppCompatActivity() {
 
                     val adapter = binding.kibunsList.adapter as KibunsAdapter
                     adapter.addItems(results)
+                    // タップ時の処理
                     adapter.setOnItemClickListener(object : KibunsAdapter.OnItemClickListener {
                         override fun onClick(view: View, data: Kibuns) {
                             val intent =
@@ -118,6 +123,25 @@ class MainActivity : AppCompatActivity() {
                                     putExtra("userId", data.user_id)
                                 }
                             startActivity(intent)
+                        }
+                    })
+                    // 長押し時の処理
+                    adapter.setOnItemLongClickLstener(object: KibunsAdapter.OnItemLongClickListener {
+                        override fun onLongClick(view: View, data: Kibuns) {
+                            if (data.user_id == user.uid) { // 自分の日記の場合
+                                AlertDialog.Builder(this@MainActivity)
+                                    .setTitle("日記削除")
+                                    .setMessage("この日記を削除しますか？")
+                                    .setPositiveButton("OK") { _, _ ->
+                                        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+                                        db.collection("kibuns").document(data.documentId!!).delete()
+                                        binding.kibunsList.adapter = KibunsAdapter()
+                                    }
+                                    .setNegativeButton("キャンセル") { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+                            }
                         }
                     })
                 }

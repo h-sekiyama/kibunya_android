@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
@@ -19,6 +20,7 @@ class KibunsAdapter(
     private var items: List<Kibuns>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var listener: OnItemClickListener
+    lateinit var longListener: OnItemLongClickListener
     constructor() : this(listOf())
     var context: Context? = null
 
@@ -69,8 +71,13 @@ class KibunsAdapter(
             }
             // 日記時間表示
             holder.binding.kibunTime.text = Functions.getTimeString(item.time)
+
             holder.binding.kibunItemLinearLayout.setOnClickListener {
                 listener.onClick(it, item)
+            }
+            holder.binding.kibunItemLinearLayout.setOnLongClickListener {
+                longListener.onLongClick(it, item)
+                true
             }
         }
     }
@@ -79,8 +86,16 @@ class KibunsAdapter(
         fun onClick(view: View, data: Kibuns)
     }
 
+    interface OnItemLongClickListener {
+        fun onLongClick(view: View, data: Kibuns)
+    }
+
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
+    }
+
+    fun setOnItemLongClickLstener(longListener: OnItemLongClickListener) {
+        this.longListener = longListener
     }
 
     fun addItems(kibuns: List<Kibuns>) {
