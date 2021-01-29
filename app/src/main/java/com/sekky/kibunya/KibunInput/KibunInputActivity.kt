@@ -7,14 +7,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +22,6 @@ import com.nifcloud.mbaas.core.NCMBQuery
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.Kibuns
-import com.sekky.kibunya.Other.FamilyAdapter
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
@@ -56,18 +51,11 @@ class KibunInputActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        init()
+    }
 
-        // 家族IDの取得
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val familyRef = db.collection("families")
-        val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
-        containsMyUidDocument.get().addOnSuccessListener { resultMap ->
-            if (resultMap.documents.size != 0) {    // 家族が1人もいない
-                familyId = resultMap.documents[0].id
-            }
-        }
+    override fun onResume() {
+        super.onResume()
 
         init()
     }
@@ -96,6 +84,18 @@ class KibunInputActivity: AppCompatActivity() {
     }
 
     private fun init() {
+        // 家族IDの取得
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val familyRef = db.collection("families")
+        val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
+        containsMyUidDocument.get().addOnSuccessListener { resultMap ->
+            if (resultMap.documents.size != 0) {    // 家族が1人もいない
+                familyId = resultMap.documents[0].id
+            }
+        }
+
         // タブ処理
         binding.tabLayout.tab_button1.setImageResource(R.drawable.tab1_on)
         binding.tabLayout.tab_button0.setOnClickListener {

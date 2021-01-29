@@ -25,6 +25,16 @@ class KibunDetailActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        configure()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        configure()
+    }
+
+    fun configure() {
         val text: String? = intent.getStringExtra("text")
         val date: String? = intent.getStringExtra("date")
         val name: String? = intent.getStringExtra("name")
