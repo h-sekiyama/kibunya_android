@@ -1,6 +1,8 @@
 package com.sekky.kibunya.KibunInput
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -96,6 +98,12 @@ class KibunInputActivity: AppCompatActivity() {
             }
         }
 
+        // 下記途中の日記保存Preference
+        val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
+        val editor = dataStore.edit()
+        val inputKibunText: String? = dataStore.getString(getString(R.string.family_diary_input_kibun_text), "")
+        binding.kibunEditText.setText(inputKibunText.toString())
+
         // タブ処理
         binding.tabLayout.tab_button1.setImageResource(R.drawable.tab1_on)
         binding.tabLayout.tab_button0.setOnClickListener {
@@ -145,6 +153,9 @@ class KibunInputActivity: AppCompatActivity() {
                     binding.textCount.setTextColor(getColor(R.color.button_disabled))
                     updateSendButtonEnable()
                 }
+                // 下記途中の文章を保存
+                editor.putString(getString(R.string.family_diary_input_kibun_text), binding.kibunEditText.text.toString())
+                editor.apply()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -225,6 +236,11 @@ class KibunInputActivity: AppCompatActivity() {
             binding.kibunSendButton.isEnabled = false
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
             binding.kibunImageSelect.setImageResource(R.drawable.diary_image_icon)
+            // Preferenceに保存してるテキスト削除
+            val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
+            val editor = dataStore.edit()
+            editor.putString(getString(R.string.family_diary_input_kibun_text), "")
+            editor.apply()
 
             if (familyId != "") {   // 家族がいる場合PUSH通知を送信する
                 val push = NCMBPush()

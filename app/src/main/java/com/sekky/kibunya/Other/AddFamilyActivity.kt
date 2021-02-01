@@ -183,15 +183,17 @@ class AddFamilyActivity: AppCompatActivity() {
                 action = Intent.ACTION_SEND
                 putExtra(
                     Intent.EXTRA_TEXT,
-                    "家族の交換日記アプリ「家族ダイアリー」\n"
-                            + user!!.displayName + "からの招待です。\n\n" +
-                            "iPhoneの方は以下をタップ！\n" +
-                            "kazokuDiary://login?id=" + binding.myUserIdInput.text.toString() + "\n\n" +
-                            "Androidの方は以下をタップ！\n" +
-                            "http://kazoku-diary?kazokuDiary=" + binding.myUserIdInput.text.toString() + "\n\n" +
-                            "アプリをダウンロード\n" +
-                            "iOS版：https://apps.apple.com/us/app/id1528947553\n\n" +
-                            "Android版：https://play.google.com/store/apps/details?id=com.sekky.kibunya"
+                            "家族の交換日記アプリ「家族ダイアリー」\n" +
+                            user!!.displayName + "からの招待です。\n\n" +
+                            "かんたん3ステップで家族登録完了！\n\n" +
+                            "手順①\n" +
+                            "家族ダイアリーをインストール（既にインストール済みなら手順②へ）\n" +
+                            "https://kibunya-app.web.app/download.html\n\n" +
+                            "手順②\n" +
+                            "インストール後にEメールアドレスか電話番号でアカウント登録（既に登録済みなら手順③へ）\n\n" +
+                            "手順③\n" +
+                            "以下のURLをタップして「家族に追加する」を選べば家族追加完了！\n" +
+                            "https://kibunya-app.web.app/?id=" + binding.myUserIdInput.text.toString()
                 )
                 type = "text/plain"
             }

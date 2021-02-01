@@ -41,4 +41,5 @@
     <string name="no_family">まだ家族が1人もいません</string>
     <string name="no_diary">誰も日記を書いていません</string>
     <string name="device_Token_key">Family_diary_device_token_key</string>
+    <string name="family_diary_input_kibun_text">Family_diary_input_kibun_text</string>
 </resources>

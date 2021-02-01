@@ -100,7 +100,7 @@
                     android:layout_gravity="right"
                     android:textSize="12sp"
                     android:text="13:54"
-                    tools:text="13:54"
+                    tools:text="@{time}"
                     tools:ignore="RtlHardcoded"
                     android:layout_marginEnd="8dp"
                     android:gravity="right|center"/>

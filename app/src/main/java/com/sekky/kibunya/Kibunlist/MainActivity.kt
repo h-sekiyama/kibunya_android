@@ -54,16 +54,18 @@ class MainActivity : AppCompatActivity() {
                 putExtra("userId", uri.toString().takeLast(28))
             }
             startActivity(intent)
+        } else {
+
+            // ニフクラに登録するdeviceTokenをPreferenceに保存しておく
+            val installation = NCMBInstallation.getCurrentInstallation()
+            val dataStore: SharedPreferences =
+                getSharedPreferences("DataStore", Context.MODE_PRIVATE)
+            val editor = dataStore.edit()
+            editor.putString(getString(R.string.device_Token_key), installation.deviceToken)
+            editor.apply()
+
+            init()
         }
-
-        // ニフクラに登録するdeviceTokenをPreferenceに保存しておく
-        val installation = NCMBInstallation.getCurrentInstallation()
-        val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
-        val editor = dataStore.edit()
-        editor.putString(getString(R.string.device_Token_key), installation.deviceToken)
-        editor.apply()
-
-        init()
     }
 
     @SuppressLint("WrongConstant", "SimpleDateFormat")
