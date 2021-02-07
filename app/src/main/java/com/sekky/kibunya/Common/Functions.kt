@@ -20,7 +20,13 @@ class Functions {
             val df = SimpleDateFormat("HH:mm")
             return df.format(date)
         }
-
+        // タイムスタンプ型の時間を渡すとYYYY月MM月dd日 HH:mm形式の文字列で返す
+        @SuppressLint("SimpleDateFormat")
+        fun getYearMonthDayTimeString(timeStamp: Timestamp): String {
+            val date = timeStamp.toDate()
+            val df = SimpleDateFormat("YYYY/MM月dd日 HH:mm")
+            return df.format(date)
+        }
         // 曜日付きの日付を取得
         @SuppressLint("SimpleDateFormat")
         fun getTodayString(date: Date): String {

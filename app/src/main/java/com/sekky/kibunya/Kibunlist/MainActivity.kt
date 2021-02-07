@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -20,20 +19,14 @@ import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
-import com.sekky.kibunya.Login.SignUpActivity
 import com.sekky.kibunya.Other.AddFamilyActivity
-import com.sekky.kibunya.Other.FamilyAdapter
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
-import com.sekky.kibunya.databinding.ActivityViewFamilyListBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import org.json.JSONArray
-import org.json.JSONObject
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -104,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 val results = resultsMap?.toObjects(Kibuns::class.java)
                     ?.sortedByDescending { kibuns -> kibuns.time } ?: return@addSnapshotListener
 
-                if (results!!.isEmpty()) {  // この日は誰も日記を書いてない
+                if (results.isEmpty()) {  // この日は誰も日記を書いてない
                     binding.noDiaryLabel.visibility = View.VISIBLE
                 } else {
                     binding.noDiaryLabel.visibility = View.GONE
@@ -123,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                                     putExtra("time", Functions.getTimeString(data.time))
                                     putExtra("image", data.image)
                                     putExtra("userId", data.user_id)
+                                    putExtra("documentId", data.documentId)
                                 }
                             startActivity(intent)
                         }

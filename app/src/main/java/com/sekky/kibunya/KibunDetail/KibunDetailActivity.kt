@@ -1,20 +1,34 @@
 package com.sekky.kibunya.KibunDetail
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.sekky.kibunya.Comments
+import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
+import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunDetailBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class KibunDetailActivity: AppCompatActivity() {
 
@@ -25,13 +39,36 @@ class KibunDetailActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        configure()
+        // プログレスバー表示
+        binding.overlay.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.VISIBLE
+
+        // 背景タップでキーボードを隠すための処理
+        Functions.addBackgroundFocus(binding.background, this)
+
+        // コメント入力を監視
+        binding.commentInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateSendButtonEnable()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                updateSendButtonEnable()
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
 
         configure()
+        showComments()
+        binding.commentSendButton.setOnClickListener {
+            sendComment()
+        }
     }
 
     fun configure() {
@@ -55,7 +92,7 @@ class KibunDetailActivity: AppCompatActivity() {
             Glide.with(this)
                 .load(imageRef)
                 .placeholder(R.drawable.noimage)
-//                .signature(ObjectKey(System.currentTimeMillis()))
+                .signature(ObjectKey(System.currentTimeMillis()))
                 .into(binding.userImage)
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
@@ -103,6 +140,79 @@ class KibunDetailActivity: AppCompatActivity() {
         // 戻るボタン
         binding.leftButton.setOnClickListener {
             finish()
+        }
+    }
+
+    // コメント表示
+    @SuppressLint("WrongConstant")
+    fun showComments() {
+        val documentId: String? = intent.getStringExtra("documentId")
+        binding.commentList.adapter = CommentAdapter()
+        binding.commentList.layoutManager = LinearLayoutManager(this, VERTICAL, false)
+
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val commentRef = db.collection("comments")
+        val diaryDocument = commentRef.whereEqualTo("diary_id", documentId!!)
+        diaryDocument.get().addOnSuccessListener { resultsMap ->
+            val results = resultsMap?.toObjects(Comments::class.java)
+                ?.sortedByDescending { comments -> comments.time } ?: return@addOnSuccessListener
+            val adapter = binding.commentList.adapter as CommentAdapter
+            adapter.addItems(results)
+        }.addOnFailureListener {
+            Functions.showAlertOneButton(this, "エラー", it.toString())
+        }.addOnCompleteListener {
+            // プログレスバー非表示
+            binding.overlay.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
+        }
+    }
+
+    // コメント送信
+    fun sendComment() {
+        // プログレスバー表示
+        binding.overlay.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.VISIBLE
+
+        val documentId: String? = intent.getStringExtra("documentId")
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val familyRef = db.collection("families")
+        val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
+        var familyId = ""
+        // PUSH通知送信の為にfamilyIdを取得しておく
+        containsMyUidDocument.get().addOnSuccessListener { resultMap ->
+            if (resultMap.documents.size != 0) {    // 家族がいる場合
+                familyId = resultMap.documents[0].id
+            }
+        }
+        db.collection("comments").document().set(
+            Comments(
+                documentId,
+                user.displayName,
+                binding.commentInput.text.toString(),
+                Timestamp.now(),
+                user.uid
+            )
+        ).addOnSuccessListener {
+            binding.commentInput.setText("")
+            updateSendButtonEnable()
+            showComments()
+        }.addOnCompleteListener {
+            // プログレスバー非表示
+            binding.overlay.visibility = View.GONE
+            binding.progressbar.visibility = View.GONE
+        }
+    }
+
+    // 送信ボタンの有効/無効の切り替え
+    private fun updateSendButtonEnable() {
+        if (binding.commentInput.text.count() > 0) {
+            binding.commentSendButton.isEnabled = true
+            binding.commentSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_6dp)
+        } else {
+            binding.commentSendButton.isEnabled = false
+            binding.commentSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_6dp)
         }
     }
 }

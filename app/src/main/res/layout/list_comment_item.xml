@@ -1,0 +1,88 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comments"
+            type="com.sekky.kibunya.Comments" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/comment_item_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="12dp">
+
+            <!-- コメント投稿者アイコン -->
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/backGround"
+                android:src="@drawable/noimage"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal">
+                    <!-- ユーザー名 -->
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:textSize="12sp"
+                        android:textColor="@color/thin_text"
+                        tools:text="ゆっこちゃん"
+                        tools:ignore="RtlHardcoded"
+                        android:layout_weight="1"
+                        android:gravity="left|center" />
+                    <!-- 投稿日時 -->
+                    <TextView
+                        android:id="@+id/comment_time"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:textSize="12sp"
+                        android:textColor="@color/thin_text"
+                        tools:text="12月31日 13:54"
+                        tools:ignore="RtlHardcoded"
+                        android:gravity="right|center"/>
+                </LinearLayout>
+
+                <!-- コメント本文 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{comments.text}"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="6dp"
+                    tools:text="コメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメントコメント" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/border" />
+    </LinearLayout>
+
+</layout>

@@ -10,4 +10,5 @@
     <color name="button_enabled">#70434A</color>
     <color name="sub_text">#90636A</color>
     <color name="negative_button">#435A70</color>
+    <color name="thin_text">#B6979C</color>
 </resources>
