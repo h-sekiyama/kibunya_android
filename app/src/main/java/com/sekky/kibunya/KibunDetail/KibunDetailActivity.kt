@@ -2,7 +2,6 @@ package com.sekky.kibunya.KibunDetail
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -18,17 +17,17 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.nifcloud.mbaas.core.NCMBInstallation
+import com.nifcloud.mbaas.core.NCMBPush
+import com.nifcloud.mbaas.core.NCMBQuery
 import com.sekky.kibunya.Comments
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibunlist.MainActivity
-import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunDetailBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class KibunDetailActivity: AppCompatActivity() {
 
@@ -36,8 +35,26 @@ class KibunDetailActivity: AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityKibunDetailBinding>(this, R.layout.activity_kibun_detail)
     }
 
+    private var text: String? = ""
+    private var date: String? = ""
+    private var name: String? = ""
+    private var kibun: Int = 0
+    private var time: String? = ""
+    private var image: String? = ""
+    private var userId: String? = ""
+    private var documentId: String? = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        text = intent.getStringExtra("text")
+        date = intent.getStringExtra("date")
+        name = intent.getStringExtra("name")
+        kibun = intent.getIntExtra("kibun", 0)
+        time = intent.getStringExtra("time")
+        image = intent.getStringExtra("image")
+        userId = intent.getStringExtra("userId")
+        documentId = intent.getStringExtra("documentId")
 
         // プログレスバー表示
         binding.overlay.visibility = View.VISIBLE
@@ -72,13 +89,6 @@ class KibunDetailActivity: AppCompatActivity() {
     }
 
     fun configure() {
-        val text: String? = intent.getStringExtra("text")
-        val date: String? = intent.getStringExtra("date")
-        val name: String? = intent.getStringExtra("name")
-        val kibun: Int = intent.getIntExtra("kibun", 0)
-        val time: String? = intent.getStringExtra("time")
-        val image: String? = intent.getStringExtra("image")
-        val userId: String? = intent.getStringExtra("userId")
 
         // CloudStorageを使う準備
         val storageRef = FirebaseStorage.getInstance().reference
@@ -146,7 +156,6 @@ class KibunDetailActivity: AppCompatActivity() {
     // コメント表示
     @SuppressLint("WrongConstant")
     fun showComments() {
-        val documentId: String? = intent.getStringExtra("documentId")
         binding.commentList.adapter = CommentAdapter()
         binding.commentList.layoutManager = LinearLayoutManager(this, VERTICAL, false)
 
@@ -198,6 +207,33 @@ class KibunDetailActivity: AppCompatActivity() {
             binding.commentInput.setText("")
             updateSendButtonEnable()
             showComments()
+
+            if (familyId != "") {   // 家族がいる場合PUSH通知を送信する
+                val push = NCMBPush()
+                // i/A共通の設定
+                push.message = "${user.displayName}が${name}の日記にコメントしました"
+
+                // 送る対象を家族に限定
+                val installation = NCMBInstallation.getCurrentInstallation()
+                val query = NCMBQuery<NCMBInstallation>("installation")
+                query.whereContainedIn("channels", listOf(familyId))
+                query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
+                push.setSearchCondition(query)
+
+                // iOS用の設定
+                push.badgeIncrementFlag = true
+                push.sound = "default"
+                push.category = "CATEGORY001"
+                // Android用の設定
+                push.action = "com.sample.pushsample.RECEIVE_PUSH"
+                push.title = "家族ダイアリー"
+                push.dialog = true
+                push.sendInBackground { e ->
+                    if (e != null) {
+                        // エラー処理
+                    }
+                }
+            }
         }.addOnCompleteListener {
             // プログレスバー非表示
             binding.overlay.visibility = View.GONE

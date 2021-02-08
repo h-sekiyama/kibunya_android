@@ -120,7 +120,8 @@
 
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
                     android:paddingBottom="20dp"
                     android:id="@+id/scrollView">
 
@@ -192,6 +193,7 @@
                             android:id="@+id/comment_list"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:nestedScrollingEnabled="false"
                             android:layout_marginTop="10dp"/>
 
                     </LinearLayout>
