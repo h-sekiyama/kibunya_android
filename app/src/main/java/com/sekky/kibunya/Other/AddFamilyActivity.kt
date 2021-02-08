@@ -107,6 +107,8 @@ class AddFamilyActivity: AppCompatActivity() {
                         }
                     } else if (result1.count() != 0 && result2.count() != 0) {   // どっちも家族がいる時
                         if (result1.documents[0].id == result2.documents[0].id) {    // 既に家族になってる時
+                            binding.newFamilyName.text = binding.searchedUserName.text
+                            binding.newFamilyName.visibility = View.VISIBLE
                             binding.addFamilyCompleteLabel.visibility = View.VISIBLE
                             binding.addFamilyCompleteText.text = "は既に家族登録済みです"
                         } else if (result1.documents[0].id != result2.documents[0].id) {  // どちらにも別々の家族がいる時
@@ -225,6 +227,8 @@ class AddFamilyActivity: AppCompatActivity() {
 
     // ユーザーを検索する処理
     private fun searchUser(user: FirebaseUser) {
+        binding.newFamilyName.visibility = View.GONE
+        binding.addFamilyCompleteLabel.visibility = View.GONE
         // 入力したのが自分のユーザーIDの場合
         if (binding.userIdInput.text.toString() == user.uid ?: "") {
             binding.searchedUserName.text = getString(R.string.my_own_user_id_label)
@@ -259,6 +263,7 @@ class AddFamilyActivity: AppCompatActivity() {
     private fun updateActionAfterAddFamily() {
         // 追加したユーザー名を表示
         binding.newFamilyName.text = binding.searchedUserName.text
+        binding.newFamilyName.visibility = View.VISIBLE
         binding.addFamilyCompleteLabel.visibility = View.VISIBLE
         binding.addFamilyCompleteText.text = getString(R.string.add_family_complete_text)
         // 家族追加ボタンをdisabledにする
