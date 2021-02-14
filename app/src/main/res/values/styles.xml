@@ -5,4 +5,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+
+        <!--ボタンON時のボタンの通り道（透明度30%）・ボタンとタッチフィードバックカラー-->
+        <item name="colorControlActivated">#70434A</item>
+
+        <!--ボタンOFF時のボタンの通り道（透明度30%）-->
+        <item name="android:colorForeground">#000000</item>
+
+        <!-- OFFボタンを押したときのタッチフィードバックカラー -->
+        <item name="colorControlHighlight">#000000</item>
+
+    </style>
 </resources>

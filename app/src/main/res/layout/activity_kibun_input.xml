@@ -183,14 +183,37 @@
 
                     </com.daasuu.bl.BubbleLayout>
                 </LinearLayout>
-                <!-- 日記画像選択 -->
-                <ImageView
-                    android:id="@+id/kibun_image_select"
-                    android:layout_width="140dp"
-                    android:layout_height="112dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/diary_image_icon" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="30dp"
+                    android:gravity="center|top">
+                    <!-- 日記画像選択 -->
+                    <ImageView
+                        android:id="@+id/kibun_image_select"
+                        android:layout_width="140dp"
+                        android:layout_height="112dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="12dp"
+                        android:src="@drawable/diary_image_icon" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="通知"
+                        android:paddingStart="30dp"
+                        android:textSize="16sp" />
+                    <Switch
+                        android:id="@+id/push_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:showText="false"
+                        android:theme="@style/CustomSwitch"
+                        android:layout_marginEnd="-80dp"
+                        android:layout_marginStart="4dp"
+                        android:checked="true"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </LinearLayout>
                 <!-- 日記投稿ボタン -->
                 <Button
                     android:id="@+id/kibun_send_button"

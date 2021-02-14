@@ -51,6 +51,9 @@ class KibunInputActivity: AppCompatActivity() {
     // 家族ID
     private var familyId = ""
 
+    // PUSH通知送信フラグ
+    private var willSendPush = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
@@ -96,6 +99,11 @@ class KibunInputActivity: AppCompatActivity() {
             if (resultMap.documents.size != 0) {    // 家族が1人もいない
                 familyId = resultMap.documents[0].id
             }
+        }
+
+        // PUSH通知のON/OFF
+        binding.pushSwitch.setOnCheckedChangeListener { _, isChecked ->
+            willSendPush = isChecked
         }
 
         // 下記途中の日記保存Preference
@@ -242,29 +250,31 @@ class KibunInputActivity: AppCompatActivity() {
             editor.putString(getString(R.string.family_diary_input_kibun_text), "")
             editor.apply()
 
-            if (familyId != "") {   // 家族がいる場合PUSH通知を送信する
-                val push = NCMBPush()
-                // i/A共通の設定
-                push.message = "${user.displayName}が日記を書きました"
+            if (willSendPush) {
+                if (familyId != "") {   // 家族がいる場合PUSH通知を送信する
+                    val push = NCMBPush()
+                    // i/A共通の設定
+                    push.message = "${user.displayName}が日記を書きました"
 
-                // 送る対象を家族に限定
-                val installation = NCMBInstallation.getCurrentInstallation()
-                val query = NCMBQuery<NCMBInstallation>("installation")
-                query.whereContainedIn("channels", listOf(familyId))
-                query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
-                push.setSearchCondition(query)
+                    // 送る対象を家族に限定
+                    val installation = NCMBInstallation.getCurrentInstallation()
+                    val query = NCMBQuery<NCMBInstallation>("installation")
+                    query.whereContainedIn("channels", listOf(familyId))
+                    query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
+                    push.setSearchCondition(query)
 
-                // iOS用の設定
-                push.badgeIncrementFlag = true
-                push.sound = "default"
-                push.category = "CATEGORY001"
-                // Android用の設定
-                push.action = "com.sample.pushsample.RECEIVE_PUSH"
-                push.title = "家族ダイアリー"
-                push.dialog = true
-                push.sendInBackground { e ->
-                    if (e != null) {
-                        // エラー処理
+                    // iOS用の設定
+                    push.badgeIncrementFlag = true
+                    push.sound = "default"
+                    push.category = "CATEGORY001"
+                    // Android用の設定
+                    push.action = "com.sample.pushsample.RECEIVE_PUSH"
+                    push.title = "家族ダイアリー"
+                    push.dialog = true
+                    push.sendInBackground { e ->
+                        if (e != null) {
+                            // エラー処理
+                        }
                     }
                 }
             }
