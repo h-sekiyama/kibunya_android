@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.tab_layout.view.*
 
 class OtherActivity: AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         val binding: ActivityOtherBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_other)

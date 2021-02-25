@@ -30,8 +30,8 @@ class AddFamilyActivity: AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser

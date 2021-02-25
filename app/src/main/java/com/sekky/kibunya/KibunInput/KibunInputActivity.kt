@@ -54,11 +54,6 @@ class KibunInputActivity: AppCompatActivity() {
     // PUSH通知送信フラグ
     private var willSendPush = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        init()
-    }
-
     override fun onResume() {
         super.onResume()
 

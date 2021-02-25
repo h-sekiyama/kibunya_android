@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
     // 日記を表示している日付（Date型）
     private var showDiaryDate: Date = Date()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         // 招待から起動した場合はユーザーIDを取得し家族追加画面に遷移
         val uri: Uri? = this.intent.data

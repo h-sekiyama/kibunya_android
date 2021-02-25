@@ -210,7 +210,6 @@
                         android:showText="false"
                         android:theme="@style/CustomSwitch"
                         android:layout_marginEnd="-80dp"
-                        android:layout_marginStart="4dp"
                         android:checked="true"
                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                 </LinearLayout>
