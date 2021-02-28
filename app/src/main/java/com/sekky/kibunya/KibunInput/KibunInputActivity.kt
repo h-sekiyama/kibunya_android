@@ -184,7 +184,7 @@ class KibunInputActivity: AppCompatActivity() {
             if (isExsistSendImage) {
                 val bitmap = (binding.kibunImageSelect.drawable as BitmapDrawable).bitmap
                 val baos = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos)
                 val data = baos.toByteArray()
                 val uploadTask = imageRef.putBytes(data)
                 uploadTask.addOnFailureListener { e ->

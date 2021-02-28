@@ -44,8 +44,8 @@ class KibunDetailActivity: AppCompatActivity() {
     private var userId: String? = ""
     private var documentId: String? = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         text = intent.getStringExtra("text")
         date = intent.getStringExtra("date")
@@ -76,10 +76,6 @@ class KibunDetailActivity: AppCompatActivity() {
                 updateSendButtonEnable()
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         configure()
         showComments()
@@ -88,7 +84,7 @@ class KibunDetailActivity: AppCompatActivity() {
         }
     }
 
-    fun configure() {
+    private fun configure() {
 
         // CloudStorageを使う準備
         val storageRef = FirebaseStorage.getInstance().reference

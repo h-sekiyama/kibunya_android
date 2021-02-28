@@ -87,9 +87,6 @@ class ChangeProfileActivity: AppCompatActivity() {
         val storageRef = FirebaseStorage.getInstance().reference
         val imageRef = storageRef.child("profileIcon/${currentUser!!.uid}.jpg")
 
-        // 名前の初期値を設定
-        beforeName = currentUser.displayName.toString()
-
         // 保存ボタンタップ
         binding.profileChangeButton.setOnClickListener {
             saveProfile(currentUser, imageRef)
@@ -147,6 +144,7 @@ class ChangeProfileActivity: AppCompatActivity() {
 
         // ギャラリーから画像選択
         binding.profileImage.setOnClickListener {
+            beforeName = binding.nameInput.text.toString()
             CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAspectRatio(1, 1)

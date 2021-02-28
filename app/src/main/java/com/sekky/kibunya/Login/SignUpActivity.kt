@@ -50,6 +50,7 @@ class SignUpActivity: AppCompatActivity() {
             if (auth.currentUser!!.isEmailVerified || auth.currentUser!!.phoneNumber != null) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
 

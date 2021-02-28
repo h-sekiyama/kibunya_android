@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AlertDialog
@@ -19,6 +20,7 @@ import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
+import com.sekky.kibunya.Login.SignUpActivity
 import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
@@ -59,6 +61,28 @@ class MainActivity : AppCompatActivity() {
 
             init()
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder(this)
+                .setTitle("アプリ終了")
+                .setMessage("アプリを閉じますか？")
+                .setPositiveButton("OK") { _, _ ->
+                    this.finishAndRemoveTask()
+                    this.moveTaskToBack(true)
+                }
+                .setNegativeButton("キャンセル") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+            return false
+        }
+        return false
+    }
+
+    override fun onBackPressed() {
+        // nop
     }
 
     @SuppressLint("WrongConstant", "SimpleDateFormat")
