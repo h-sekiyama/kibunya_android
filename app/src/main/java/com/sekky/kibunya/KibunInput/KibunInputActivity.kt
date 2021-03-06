@@ -259,7 +259,8 @@ class KibunInputActivity: AppCompatActivity() {
                     push.setSearchCondition(query)
 
                     // iOS用の設定
-                    push.badgeIncrementFlag = true
+                    push.badgeIncrementFlag = false
+                    push.badgeSetting = 1
                     push.sound = "default"
                     push.category = "CATEGORY001"
                     // Android用の設定
