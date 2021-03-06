@@ -32,6 +32,7 @@ class Functions {
         fun getTodayString(date: Date): String {
             val df = SimpleDateFormat("YYYY/MM/dd")
             val calendar: Calendar = Calendar.getInstance()
+            calendar.time = date
             val day: Int = calendar.get(Calendar.DAY_OF_WEEK)
             var weekDay = ""
             when(day) {
