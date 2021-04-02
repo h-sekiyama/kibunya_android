@@ -13,6 +13,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -72,6 +73,7 @@ class KibunInputActivity: AppCompatActivity() {
                     Glide.with(this)
                         .load(result.uri)
 //                        .signature(ObjectKey(System.currentTimeMillis()))
+                        .diskCacheStrategy(DiskCacheStrategy.DATA)
                         .into(binding.kibunImageSelect)
 
                     isExsistSendImage = true
@@ -184,7 +186,7 @@ class KibunInputActivity: AppCompatActivity() {
             if (isExsistSendImage) {
                 val bitmap = (binding.kibunImageSelect.drawable as BitmapDrawable).bitmap
                 val baos = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
                 val uploadTask = imageRef.putBytes(data)
                 uploadTask.addOnFailureListener { e ->
