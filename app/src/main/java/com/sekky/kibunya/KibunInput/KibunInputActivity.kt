@@ -6,7 +6,9 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -55,6 +59,9 @@ class KibunInputActivity: AppCompatActivity() {
     // PUSH通知送信フラグ
     private var willSendPush = true
 
+    // 日記画像のURI
+    private var diaryImageUri: Uri? = null
+
     override fun onResume() {
         super.onResume()
 
@@ -72,10 +79,8 @@ class KibunInputActivity: AppCompatActivity() {
                 if (resultCode == RESULT_OK) {
                     Glide.with(this)
                         .load(result.uri)
-//                        .signature(ObjectKey(System.currentTimeMillis()))
-                        .diskCacheStrategy(DiskCacheStrategy.DATA)
                         .into(binding.kibunImageSelect)
-
+                    diaryImageUri = result.uri
                     isExsistSendImage = true
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     val error = result.error
@@ -184,7 +189,7 @@ class KibunInputActivity: AppCompatActivity() {
 
             // 添付画像があるか判定
             if (isExsistSendImage) {
-                val bitmap = (binding.kibunImageSelect.drawable as BitmapDrawable).bitmap
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, diaryImageUri)
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
