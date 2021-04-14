@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout.VERTICAL
@@ -20,7 +19,6 @@ import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
 import com.sekky.kibunya.KibunInput.KibunInputActivity
 import com.sekky.kibunya.Kibuns
-import com.sekky.kibunya.Login.SignUpActivity
 import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
