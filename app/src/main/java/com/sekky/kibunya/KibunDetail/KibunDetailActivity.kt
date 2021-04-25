@@ -2,16 +2,22 @@ package com.sekky.kibunya.KibunDetail
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -118,9 +124,34 @@ class KibunDetailActivity: AppCompatActivity() {
         binding.time = time
         // 画像
         if (image != "") {
+            binding.kibunImage.scaleX = 0.1f
+            binding.kibunImage.scaleY = 0.1f
             Glide.with(this)
                 .load(Uri.parse(image))
                 .signature(ObjectKey(System.currentTimeMillis()))
+                .thumbnail(Glide.with(this).load(R.drawable.image_loading))
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        diaryImageReverse()
+                        return false
+                    }
+
+                })
                 .into(binding.kibunImage)
             binding.kibunImage.visibility = View.VISIBLE
         }
@@ -147,6 +178,11 @@ class KibunDetailActivity: AppCompatActivity() {
         binding.leftButton.setOnClickListener {
             finish()
         }
+    }
+
+    fun diaryImageReverse() {
+        binding.kibunImage.scaleX = 1f
+        binding.kibunImage.scaleY = 1f
     }
 
     // コメント表示

@@ -11,4 +11,6 @@
     <color name="sub_text">#90636A</color>
     <color name="negative_button">#435A70</color>
     <color name="thin_text">#B6979C</color>
+    <color name="today_icon">#fe726c</color>
+    <color name="current_day_icon">#8ad7b9</color>
 </resources>

@@ -46,6 +46,30 @@ class Functions {
             }
             return df.format(date) + "(${weekDay})"
         }
+        // Dateから年を取得
+        @SuppressLint("SimpleDateFormat")
+        fun getYearFromDate(date: Date): Int {
+            val df = SimpleDateFormat("YYYY")
+            return df.format(date).toInt()
+        }
+        // Dateから月を取得
+        @SuppressLint("SimpleDateFormat")
+        fun getMontshFromDate(date: Date): Int {
+            val df = SimpleDateFormat("MM")
+            return df.format(date).toInt() - 1
+        }
+        // Dateから日を取得
+        @SuppressLint("SimpleDateFormat")
+        fun getDayFromDate(date: Date): Int {
+            val df = SimpleDateFormat("dd")
+            return df.format(date).toInt()
+        }
+        // TimestampをCalendarに変換
+        fun getCalendarFromTimestamp(timestamp: Timestamp): Calendar {
+            val calendar: Calendar = Calendar.getInstance()
+            calendar.time = timestamp.toDate()
+            return calendar
+        }
         // 背景がタッチされた際にキーボードを隠す処理
         @SuppressLint("ClickableViewAccessibility")
         fun addBackgroundFocus(v: View, context: Context) {

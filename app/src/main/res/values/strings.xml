@@ -44,4 +44,13 @@
     <string name="family_diary_input_kibun_text">Family_diary_input_kibun_text</string>
     <string name="comment_label">コメント</string>
     <string name="comment_send_button">送る</string>
+
+    <!-- カレンダーラベル用 -->
+    <string name="material_calendar_monday">月</string>
+    <string name="material_calendar_tuesday">火</string>
+    <string name="material_calendar_wednesday">水</string>
+    <string name="material_calendar_thursday">木</string>
+    <string name="material_calendar_friday">金</string>
+    <string name="material_calendar_saturday">土</string>
+    <string name="material_calendar_sunday">日</string>
 </resources>

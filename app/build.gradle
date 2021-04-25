@@ -50,14 +50,14 @@ android {
             keyPassword 'iigyuxs8yati'
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.sekky.kibunya"
         minSdkVersion 26
-        targetSdkVersion 30
-        versionCode 15
-        versionName "2.4"
+        targetSdkVersion 29
+        versionCode 19
+        versionName "2.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -117,4 +117,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.3.1'
     implementation files('libs/NCMB.jar')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
 }

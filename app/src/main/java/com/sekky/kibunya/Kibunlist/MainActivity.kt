@@ -4,14 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
+import android.widget.CalendarView
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.applandeo.materialcalendarview.EventDay
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nifcloud.mbaas.core.*
@@ -37,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     // 日記を表示している日付（Date型）
     private var showDiaryDate: Date = Date()
 
+    private var installation = NCMBInstallation.getCurrentInstallation()
+
     override fun onResume() {
         super.onResume()
 
@@ -50,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         } else {
 
             // ニフクラに登録するdeviceTokenをPreferenceに保存しておく
-            val installation = NCMBInstallation.getCurrentInstallation()
+            installation = NCMBInstallation.getCurrentInstallation()
             val dataStore: SharedPreferences =
                 getSharedPreferences("DataStore", Context.MODE_PRIVATE)
             val editor = dataStore.edit()
@@ -102,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
         var familyList: List<String> = listOf(user.uid)
         var familyId = ""
+        var diaryWrittenDays = arrayListOf<Calendar>()
 
         containsMyUidDocument.get().addOnSuccessListener { resultMap ->
             if (resultMap.documents.size != 0) {    // 家族がいる場合
@@ -112,7 +121,6 @@ class MainActivity : AppCompatActivity() {
                 if (resultMap.documents.size != 0) {
                     // 家族登録状況を元にニフクラにfamilyIdを登録
                     familyId = resultMap.documents[0].id
-                    val installation = NCMBInstallation.getCurrentInstallation()
                     installation.channels = JSONArray("[${familyId}]")
                     installation.saveInBackground()
                 }
@@ -172,6 +180,19 @@ class MainActivity : AppCompatActivity() {
             binding.progressbar.visibility = View.GONE
         }
 
+        // 家族の誰かが日記を書いてる日付リストを作成
+        db.collection("kibuns").whereIn("user_id", familyList).addSnapshotListener { resultsMap, exception ->
+            resultsMap?.forEach {
+                diaryWrittenDays.add(Functions.getCalendarFromTimestamp(it.data["time"] as Timestamp))
+            }
+            // 日記を書いてる日にちにイベントアイコン表示
+            val events = arrayListOf<EventDay>()
+            diaryWrittenDays.forEach {
+                events.add(EventDay(it, R.drawable.event_icon, Color.parseColor("#228B22")))
+            }
+            calendarView.setEvents(events)
+        }
+
         // 1日戻るボタンタップ
         binding.leftButton.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -195,6 +216,40 @@ class MainActivity : AppCompatActivity() {
             }
             init()
         }
+
+        // カレンダーボタンタップ
+        binding.calendarButton.setOnClickListener {
+            binding.popupLayout.visibility = View.VISIBLE
+            binding.overlay.visibility = View.VISIBLE
+            binding.calendarView.visibility = View.VISIBLE
+        }
+
+        // カレンダーの日付タップ
+        binding.calendarView.setOnDayClickListener(object : OnDayClickListener {
+            override fun onDayClick(eventDay: EventDay) {
+                showDiaryDate = eventDay.calendar.time
+                if (SimpleDateFormat("dd-MM-yyyy").format(showDiaryDate) == SimpleDateFormat("dd-MM-yyyy").format(Date())) {  // 表示してる日付が今日ならそれ以上進めなくする
+                    binding.rightButton.isEnabled = false
+                    binding.rightButton.setBackgroundResource(R.drawable.arrow_r_off)
+                }
+                init()
+                binding.popupLayout.visibility = View.GONE
+                binding.overlay.visibility = View.GONE
+                binding.calendarView.visibility = View.INVISIBLE
+            }
+        })
+
+        // カレンダーエリア外タップ（カレンダーを閉じる）
+        binding.overlay.setOnClickListener {
+            binding.popupLayout.visibility = View.GONE
+            binding.overlay.visibility = View.GONE
+            binding.calendarView.visibility = View.INVISIBLE
+        }
+
+        // 選択中の日付をハイライト
+        val calendar = Calendar.getInstance()
+        calendar.set(Functions.getYearFromDate(showDiaryDate), Functions.getMontshFromDate(showDiaryDate), Functions.getDayFromDate(showDiaryDate))
+        calendarView.setDate(calendar)
 
         // タブボタン処理
         binding.tabLayout.tab_button0.setImageResource(R.drawable.tab0_on)
