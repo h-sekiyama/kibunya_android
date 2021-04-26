@@ -65,6 +65,11 @@ class MainActivity : AppCompatActivity() {
             editor.putString(getString(R.string.device_Token_key), installation.deviceToken)
             editor.apply()
 
+            // カレンダー非表示
+            binding.popupLayout.visibility = View.INVISIBLE
+            binding.overlay.visibility = View.INVISIBLE
+            binding.calendarView.visibility = View.INVISIBLE
+
             init()
         }
     }
@@ -115,6 +120,19 @@ class MainActivity : AppCompatActivity() {
         containsMyUidDocument.get().addOnSuccessListener { resultMap ->
             if (resultMap.documents.size != 0) {    // 家族がいる場合
                 familyList = resultMap.documents[0].get("user_id") as List<String>
+            }
+
+            // 家族の誰かが日記を書いてる日付リストを作成
+            db.collection("kibuns").whereIn("user_id", familyList).addSnapshotListener { resultsMap, exception ->
+                resultsMap?.forEach {
+                    diaryWrittenDays.add(Functions.getCalendarFromTimestamp(it.data["time"] as Timestamp))
+                }
+                // 日記を書いてるカレンダーの日にちにイベントアイコン表示
+                val events = arrayListOf<EventDay>()
+                diaryWrittenDays.forEach {
+                    events.add(EventDay(it, R.drawable.event_icon, Color.parseColor("#228B22")))
+                }
+                calendarView.setEvents(events)
             }
 
             db.collection("kibuns").whereIn("user_id", familyList).whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
@@ -178,19 +196,6 @@ class MainActivity : AppCompatActivity() {
             // プログレスバー非表示
             binding.overlay.visibility = View.GONE
             binding.progressbar.visibility = View.GONE
-        }
-
-        // 家族の誰かが日記を書いてる日付リストを作成
-        db.collection("kibuns").whereIn("user_id", familyList).addSnapshotListener { resultsMap, exception ->
-            resultsMap?.forEach {
-                diaryWrittenDays.add(Functions.getCalendarFromTimestamp(it.data["time"] as Timestamp))
-            }
-            // 日記を書いてる日にちにイベントアイコン表示
-            val events = arrayListOf<EventDay>()
-            diaryWrittenDays.forEach {
-                events.add(EventDay(it, R.drawable.event_icon, Color.parseColor("#228B22")))
-            }
-            calendarView.setEvents(events)
         }
 
         // 1日戻るボタンタップ
