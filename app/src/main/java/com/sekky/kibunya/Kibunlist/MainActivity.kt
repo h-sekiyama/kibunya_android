@@ -236,6 +236,9 @@ class MainActivity : AppCompatActivity() {
                 if (SimpleDateFormat("dd-MM-yyyy").format(showDiaryDate) == SimpleDateFormat("dd-MM-yyyy").format(Date())) {  // 表示してる日付が今日ならそれ以上進めなくする
                     binding.rightButton.isEnabled = false
                     binding.rightButton.setBackgroundResource(R.drawable.arrow_r_off)
+                } else {
+                    binding.rightButton.isEnabled = true
+                    binding.rightButton.setBackgroundResource(R.drawable.arrow_r)
                 }
                 init()
                 binding.popupLayout.visibility = View.GONE

@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -23,6 +24,9 @@ import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivitySignUpBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
@@ -44,6 +48,11 @@ class SignUpActivity: AppCompatActivity() {
         } else {
             NCMB.initialize(this.applicationContext, "23cdc4478a47767b5f49bcfa80b33aa8087f5d4ad96192a457489ccac91a4721", "645eb370a2b644caae9d229392ac3b654593913d2f996040c8751027453f0fa2")
         }
+
+        GlobalScope.launch(Dispatchers.Default) {
+            Glide.get(applicationContext).clearDiskCache()
+        }
+        Glide.get(applicationContext).clearMemory()
 
         // メール認証済みか電話番号認証済みなら即メイン画面へ遷移
         if (auth.currentUser != null) {

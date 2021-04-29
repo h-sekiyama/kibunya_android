@@ -101,10 +101,9 @@ class KibunDetailActivity: AppCompatActivity() {
         // ユーザーアイコン
         imageRef.getBytes(1000000).addOnSuccessListener {
             // 画像が存在すればそれを表示
-            Glide.with(this)
+            Glide.with(applicationContext)
                 .load(imageRef)
                 .placeholder(R.drawable.noimage)
-                .signature(ObjectKey(System.currentTimeMillis()))
                 .into(binding.userImage)
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
@@ -128,7 +127,6 @@ class KibunDetailActivity: AppCompatActivity() {
             binding.kibunImage.scaleY = 0.1f
             Glide.with(this)
                 .load(Uri.parse(image))
-                .signature(ObjectKey(System.currentTimeMillis()))
                 .thumbnail(Glide.with(this).load(R.drawable.image_loading))
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(

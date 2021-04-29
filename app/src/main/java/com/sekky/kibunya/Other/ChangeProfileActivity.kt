@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -23,10 +25,11 @@ import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivityChangeProfileBinding
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_change_profile.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 
@@ -59,7 +62,6 @@ class ChangeProfileActivity: AppCompatActivity() {
             Glide.with(this)
                 .load(imageRef)
                 .placeholder(R.drawable.noimage)
-                .signature(ObjectKey(System.currentTimeMillis()))
                 .into(binding.profileImage)
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
@@ -99,8 +101,7 @@ class ChangeProfileActivity: AppCompatActivity() {
             if (resultData != null) {
                 if (resultCode == RESULT_OK) {
                     Glide.with(this)
-                        .load(result.uri)
-                        .signature(ObjectKey(System.currentTimeMillis()))
+                        .load(result?.uriContent)
                         .into(binding.profileImage)
 
                     // 保存ボタンをアクティブにする
@@ -109,7 +110,7 @@ class ChangeProfileActivity: AppCompatActivity() {
 
                     isChangedProfIcon = true
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val error = result.error
+                    val error = result?.error
                     Functions.showAlertOneButton(this, "エラー", error.toString())
                 }
             }
@@ -212,6 +213,10 @@ class ChangeProfileActivity: AppCompatActivity() {
                                     )
                                 }.addOnSuccessListener {
                                     isChangedProfIcon = false
+                                    GlobalScope.launch(Dispatchers.Default) {
+                                        Glide.get(applicationContext).clearDiskCache()
+                                    }
+                                    Glide.get(applicationContext).clearMemory()
                                 }
                             }
                         }.addOnFailureListener {

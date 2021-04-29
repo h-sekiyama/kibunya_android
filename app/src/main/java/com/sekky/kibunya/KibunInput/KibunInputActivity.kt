@@ -13,6 +13,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,8 +29,6 @@ import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
@@ -73,12 +73,12 @@ class KibunInputActivity: AppCompatActivity() {
             if (resultData != null) {
                 if (resultCode == RESULT_OK) {
                     Glide.with(this)
-                        .load(result.uri)
+                        .load(result?.uriContent)
                         .into(binding.kibunImageSelect)
-                    diaryImageUri = result.uri
+                    diaryImageUri = result?.uriContent
                     isExsistSendImage = true
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val error = result.error
+                    val error = result?.error
                     Functions.showAlertOneButton(this, "エラー", error.toString())
                 }
             }

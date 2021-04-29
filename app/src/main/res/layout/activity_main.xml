@@ -44,7 +44,7 @@
                     android:background="@drawable/calendar_icon"
                     android:layout_gravity="left|center"
                     tools:ignore="RtlHardcoded"
-                    android:layout_marginStart="-30dp"
+                    android:layout_marginStart="-26dp"
                     android:layout_marginEnd="40dp"/>
                 <!-- １日進むボタン -->
                 <Button
