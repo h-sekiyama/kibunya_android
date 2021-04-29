@@ -122,4 +122,5 @@ dependencies {
     implementation files('libs/NCMB.jar')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
+    implementation 'com.github.hotchemi:android-rate:1.0.1'
 }

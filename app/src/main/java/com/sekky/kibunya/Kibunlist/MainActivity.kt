@@ -1,19 +1,20 @@
 package com.sekky.kibunya.Kibunlist
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
+import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.View
-import android.widget.CalendarView
 import android.widget.LinearLayout.VERTICAL
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
@@ -29,6 +30,7 @@ import com.sekky.kibunya.Other.AddFamilyActivity
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityMainBinding
+import hotchemi.android.rate.AppRate
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import org.json.JSONArray
@@ -44,6 +46,18 @@ class MainActivity : AppCompatActivity() {
     private var showDiaryDate: Date = Date()
 
     private var installation = NCMBInstallation.getCurrentInstallation()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // レビュー促進ダイアログ表示
+        AppRate.with(this)
+            .setInstallDays(0) // 起動した回数のカウントを開始する日をインストール日基準で指定。デフォルトは 10(日)後。0だとインストール初日
+            .setLaunchTimes(60) // レイティングのダイアログを表示するまでの起動した回数。 デフォルトは10
+            .setRemindInterval(7) // "後で"をクリックしたときのリマインドの間隔。デフォルトは 1(日)
+            .monitor()
+        AppRate.showRateDialogIfMeetsConditions(this)
+    }
 
     override fun onResume() {
         super.onResume()
