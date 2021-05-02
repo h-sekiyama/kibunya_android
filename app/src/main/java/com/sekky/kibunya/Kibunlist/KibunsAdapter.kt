@@ -67,6 +67,8 @@ class KibunsAdapter(
             // 添付画像あり表示
             if (item.image != "") {
                 holder.binding.imageIcon.visibility = View.VISIBLE
+            } else {
+                holder.binding.imageIcon.visibility = View.INVISIBLE
             }
             // 日記時間表示
             holder.binding.kibunTime.text = Functions.getTimeString(item.time)
@@ -77,6 +79,16 @@ class KibunsAdapter(
             holder.binding.kibunItemLinearLayout.setOnLongClickListener {
                 longListener.onLongClick(it, item)
                 true
+            }
+            // コメント数表示
+            db.collection("comments").whereEqualTo("diary_id", item.documentId).addSnapshotListener { snaps, error ->
+                if (error != null || snaps?.count() == 0) {
+                    holder.binding.commentCountView.visibility = View.INVISIBLE
+                    return@addSnapshotListener
+                } else {
+                    holder.binding.commentCountView.visibility = View.VISIBLE
+                    holder.binding.commentCount.text = snaps?.count().toString()
+                }
             }
         }
     }

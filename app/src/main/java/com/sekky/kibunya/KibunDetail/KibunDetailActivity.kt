@@ -109,8 +109,17 @@ class KibunDetailActivity: AppCompatActivity() {
             // 取得失敗したらデフォルト画像表示
             binding.userImage.setImageResource(R.drawable.noimage)
         }
-        // ユーザー名
-        binding.name = name
+        // ユーザー名は都度FireStoreから取得
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        userId ?.run {
+            val docRef = db.collection("users").document(userId!!)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    binding.name = document.get("name").toString()
+                }
+        } ?: run {
+            binding.name = name
+        }
         // 気分アイコン
         when (kibun) {
             0 -> binding.kibun.setImageResource(R.drawable.kibun_icon0)

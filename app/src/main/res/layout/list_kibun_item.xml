@@ -70,6 +70,30 @@
                         tools:ignore="RtlHardcoded"
                         android:layout_weight="1"
                         android:gravity="left|center" />
+                    <!-- コメント数 -->
+                    <LinearLayout
+                        android:id="@+id/comment_count_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/comment" />
+                        <TextView
+                            android:id="@+id/comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:textColor="@color/text"
+                            tools:text="99" />
+                    </LinearLayout>
                     <!-- 画像ありアイコン -->
                     <ImageView
                         android:id="@+id/image_icon"
