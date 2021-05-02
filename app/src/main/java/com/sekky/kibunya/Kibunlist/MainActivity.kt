@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
     private fun init() {
         // プログレスバー用オーバーレイを表示
         binding.overlay.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.VISIBLE
 
         //ヘッダーの日付を表示
         binding.todayText.setText(Functions.getTodayString(showDiaryDate))
@@ -161,6 +162,9 @@ class MainActivity : AppCompatActivity() {
 
                 if (results.isEmpty()) {  // この日は誰も日記を書いてない
                     binding.noDiaryLabel.visibility = View.VISIBLE
+                    // プログレスバー用オーバーレイを非表示
+                    binding.overlay.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
                 } else {
                     binding.noDiaryLabel.visibility = View.GONE
 
@@ -202,14 +206,13 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     })
+                    // プログレスバー非表示
+                    binding.overlay.visibility = View.GONE
+                    binding.progressbar.visibility = View.GONE
                 }
             }
         }.addOnFailureListener {
             Functions.showAlertOneButton(this, "エラー", it.toString())
-        }.addOnCompleteListener {
-            // プログレスバー非表示
-            binding.overlay.visibility = View.GONE
-            binding.progressbar.visibility = View.GONE
         }
 
         // 1日戻るボタンタップ
@@ -256,7 +259,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 init()
                 binding.popupLayout.visibility = View.GONE
-                binding.overlay.visibility = View.GONE
                 binding.calendarView.visibility = View.INVISIBLE
             }
         })

@@ -36,10 +36,15 @@ class CommentAdapter(
             val imageRef = storageRef.child("profileIcon/${item.user_id}.jpg")
             imageRef.getBytes(1000000).addOnSuccessListener {
                 // 画像が存在すればそれを表示
-                Glide.with(context!!)
-                    .load(imageRef)
-                    .placeholder(R.drawable.noimage)
-                    .into(holder.binding.userIcon)
+                context ?.run {
+                    Glide.with(context!!)
+                        .load(imageRef)
+                        .placeholder(R.drawable.noimage)
+                        .into(holder.binding.userIcon)
+                } ?:run {
+                    // nop
+                }
+
             }.addOnFailureListener {
                 // 取得失敗したらデフォルト画像表示
                 holder.binding.userIcon.setImageResource(R.drawable.noimage)
