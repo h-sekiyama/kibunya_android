@@ -57,10 +57,6 @@ class MainActivity : AppCompatActivity() {
             .setRemindInterval(7) // "後で"をクリックしたときのリマインドの間隔。デフォルトは 1(日)
             .monitor()
         AppRate.showRateDialogIfMeetsConditions(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         // 招待から起動した場合はユーザーIDを取得し家族追加画面に遷移
         val uri: Uri? = this.intent.data
