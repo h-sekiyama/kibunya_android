@@ -7,7 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -69,6 +69,22 @@ class Functions {
             val calendar: Calendar = Calendar.getInstance()
             calendar.time = timestamp.toDate()
             return calendar
+        }
+        // 日付の文字列をDate型に変換
+        @SuppressLint("SimpleDateFormat")
+        fun getDateFromString(dateString: String, pattern: String = "yyyy/M/d HH:mm:ss"): Date? {
+            val sdFormat = try {
+                SimpleDateFormat(pattern)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+            return sdFormat?.let {
+                try {
+                    it.parse(dateString)
+                } catch (e: ParseException){
+                    null
+                }
+            }
         }
         // 背景がタッチされた際にキーボードを隠す処理
         @SuppressLint("ClickableViewAccessibility")

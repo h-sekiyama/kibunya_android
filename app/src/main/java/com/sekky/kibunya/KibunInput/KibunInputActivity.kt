@@ -1,5 +1,6 @@
 package com.sekky.kibunya.KibunInput
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -31,8 +32,10 @@ import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class KibunInputActivity: AppCompatActivity() {
@@ -56,6 +59,15 @@ class KibunInputActivity: AppCompatActivity() {
 
     // 日記画像のURI
     private var diaryImageUri: Uri? = null
+
+    // 日記の投稿年月日（文字列）
+    private var sendDiaryDateString: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日"))
+
+    // 日記の投稿日時のタイムスタンプ
+    private var sendDiaryTime: Timestamp = Timestamp.now()
+
+    // 日記の投稿年月日（Date型）
+    private var sendDiaryDate: Date = Date()
 
     override fun onResume() {
         super.onResume()
@@ -215,6 +227,11 @@ class KibunInputActivity: AppCompatActivity() {
 
         // 日記を書くボタンの有効/無効切り替え
         updateSendButtonEnable()
+
+        // 日にち選択ダイアログ表示
+        binding.changeDate.setOnClickListener {
+            showDatePicker()
+        }
     }
 
     // 日記の更新
@@ -226,13 +243,13 @@ class KibunInputActivity: AppCompatActivity() {
     ) {
         db.collection("kibuns").document(documentId).set(
             Kibuns(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日")),
+                sendDiaryDateString,
                 documentId,
                 imageUrl,
                 selectedKibun,
                 user!!.displayName,
                 binding.kibunEditText.text.toString(),
-                Timestamp.now(),
+                sendDiaryTime,
                 user.uid
             )
         ).addOnSuccessListener {
@@ -337,5 +354,27 @@ class KibunInputActivity: AppCompatActivity() {
         }
         selectedKibun = kibun
         updateSendButtonEnable()
+    }
+
+    // 日にち選択ダイアログ表示
+    private fun showDatePicker() {
+        val datePickerDialog = DatePickerDialog(
+            this,
+            {_, year, month, dayOfMonth ->
+                sendDiaryDateString = "${year}年${String.format("%02d", month + 1)}月${String.format("%02d", dayOfMonth)}日"
+                if (Functions.getYearFromDate(Date()) == year && Functions.getMontshFromDate(Date()) == month && Functions.getDayFromDate(Date()) == dayOfMonth) {
+                    sendDiaryDate = Date()
+                    binding.todayText.text = "今日の日記"
+                } else {
+                    sendDiaryDate = Functions.getDateFromString("${year}/${month + 1}/${dayOfMonth} 23:59:59")!!
+                    binding.todayText.text = "${month + 1}月${dayOfMonth}日の日記"
+                }
+                sendDiaryTime = Timestamp(sendDiaryDate)
+            },
+            Functions.getYearFromDate(sendDiaryDate),
+            Functions.getMontshFromDate(sendDiaryDate),
+            Functions.getDayFromDate(sendDiaryDate)
+        )
+        datePickerDialog.show()
     }
 }
