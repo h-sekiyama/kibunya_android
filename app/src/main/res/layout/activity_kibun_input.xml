@@ -204,21 +204,27 @@
                         android:layout_gravity="center"
                         android:layout_margin="12dp"
                         android:src="@drawable/diary_image_icon" />
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/push_switch_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="通知"
-                        android:paddingStart="30dp"
-                        android:textSize="16sp" />
-                    <Switch
-                        android:id="@+id/push_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:showText="false"
-                        android:theme="@style/CustomSwitch"
-                        android:layout_marginEnd="-80dp"
-                        android:checked="true"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="-80dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="通知"
+                            android:paddingStart="30dp"
+                            android:textSize="16sp" />
+                        <Switch
+                            android:id="@+id/push_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:showText="false"
+                            android:theme="@style/CustomSwitch"
+                            android:checked="true"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    </LinearLayout>
                 </LinearLayout>
                 <!-- 日記投稿ボタン -->
                 <Button

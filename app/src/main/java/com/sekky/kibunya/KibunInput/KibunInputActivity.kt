@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.Editable
@@ -14,6 +15,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
 import com.google.firebase.Timestamp
@@ -49,25 +54,32 @@ class KibunInputActivity: AppCompatActivity() {
 
     // 選択中の気分
     private var selectedKibun: Int? = null
+    // 画像添付のありなし
     private var isExsistSendImage: Boolean = false
-
     // 家族ID
     private var familyId = ""
-
     // PUSH通知送信フラグ
     private var willSendPush = true
-
     // 日記画像のURI
     private var diaryImageUri: Uri? = null
-
     // 日記の投稿年月日（文字列）
     private var sendDiaryDateString: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY年MM月dd日"))
-
     // 日記の投稿日時のタイムスタンプ
     private var sendDiaryTime: Timestamp = Timestamp.now()
-
     // 日記の投稿年月日（Date型）
     private var sendDiaryDate: Date = Date()
+    // 日記のdocumentId
+    private var documentId: String = ""
+    // 編集からの遷移か否か
+    private var isEditDiary: Boolean? = null
+    // 送る日記のテキスト（編集時に使用）
+    private var diaryText: String? = null
+    // 気分変数（編集時に使用）
+    private var kibunParam: Int? = null
+    // 画像のURL（編集時に使用）
+    private var imageUrl: String? = null
+    // 画像の初期表示をしたか
+    private var isFirstLoadImage: Boolean = false
 
     override fun onResume() {
         super.onResume()
@@ -98,6 +110,10 @@ class KibunInputActivity: AppCompatActivity() {
     }
 
     private fun init() {
+        // 日記の編集か否かを設定
+        isEditDiary = intent.getBooleanExtra("isEditDiary", false)
+        imageUrl = intent.getStringExtra("imageUrl") ?: ""
+
         // 家族IDの取得
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
@@ -171,8 +187,13 @@ class KibunInputActivity: AppCompatActivity() {
                     updateSendButtonEnable()
                 }
                 // 下記途中の文章を保存
-                editor.putString(getString(R.string.family_diary_input_kibun_text), binding.kibunEditText.text.toString())
-                editor.apply()
+                if (isEditDiary != true) {
+                    editor.putString(
+                        getString(R.string.family_diary_input_kibun_text),
+                        binding.kibunEditText.text.toString()
+                    )
+                    editor.apply()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -189,7 +210,11 @@ class KibunInputActivity: AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             val user = auth.currentUser
             val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-            val documentId: String = db.collection("kibuns").document().id
+            documentId = if (isEditDiary == true) {
+                intent.getStringExtra("documentId")!!
+            } else {
+                db.collection("kibuns").document().id
+            }
             // CloudStorageを使う準備
             val storageRef = FirebaseStorage.getInstance().reference
             val imageRef = storageRef.child("diary/${documentId}.jpg")
@@ -213,7 +238,7 @@ class KibunInputActivity: AppCompatActivity() {
                     }
                 }
             } else {
-                sendDiary(user, db, documentId)
+                sendDiary(user, db, documentId, imageUrl ?: "")
             }
         }
 
@@ -231,6 +256,57 @@ class KibunInputActivity: AppCompatActivity() {
         // 日にち選択ダイアログ表示
         binding.changeDate.setOnClickListener {
             showDatePicker()
+        }
+
+        // 編集時は初期値を設定
+        if (isEditDiary == true) {
+            // PUSHは送らない
+            willSendPush = false
+            // 日記テキストの初期値を設定
+            diaryText = intent.getStringExtra("diaryText")
+            binding.kibunEditText.setText(diaryText)
+            // 気分の初期値を設定
+            kibunParam = intent.getIntExtra("kibunParam", 0)
+            tapKibunIcon(kibunParam!!)
+            // 通知スイッチを非表示にする
+            binding.pushSwitchView.visibility = View.INVISIBLE
+            // 日記の日時の初期値を設定
+            sendDiaryTime = intent.getParcelableExtra("sendDiaryDateTime")!!
+            sendDiaryDate = sendDiaryTime.toDate()
+            sendDiaryDateString = Functions.getYearMonthDayTimeString2(sendDiaryTime)
+            // ヘッダーの日付を変更
+            binding.todayText.setText("${Functions.getMontshFromDate(sendDiaryDate) + 1}月${Functions.getDayFromDate(sendDiaryDate)}日の日記")
+            // 添付画像の初期表示
+            if (imageUrl != "" && !isFirstLoadImage) {
+                Glide.with(this)
+                    .load(Uri.parse(imageUrl))
+                    .thumbnail(Glide.with(this).load(R.drawable.image_loading))
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            binding.kibunImageSelect.scaleX = 1f
+                            binding.kibunImageSelect.scaleY = 1f
+                            return false
+                        }
+
+                    })
+                    .into(binding.kibunImageSelect)
+                isFirstLoadImage = true
+            }
         }
     }
 
@@ -254,10 +330,12 @@ class KibunInputActivity: AppCompatActivity() {
             )
         ).addOnSuccessListener {
             binding.sendComplete.visibility = View.VISIBLE
-            binding.kibunEditText.text.clear()
+            if (isEditDiary != true) {
+                binding.kibunEditText.text.clear()
+                binding.kibunImageSelect.setImageResource(R.drawable.diary_image_icon)
+            }
             binding.kibunSendButton.isEnabled = false
             binding.kibunSendButton.setBackgroundResource(R.drawable.shape_rounded_corners_disabled_30dp)
-            binding.kibunImageSelect.setImageResource(R.drawable.diary_image_icon)
             // Preferenceに保存してるテキスト削除
             val dataStore: SharedPreferences = getSharedPreferences("DataStore", Context.MODE_PRIVATE)
             val editor = dataStore.edit()

@@ -53,8 +53,16 @@
                     android:textSize="24sp"
                     android:gravity="center"
                     android:textColor="@color/text"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="24dp" />
+                    android:layout_weight="1" />
+                <!-- 編集ボタン -->
+                <ImageView
+                    android:id="@+id/edit_diary"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/pencil" />
             </LinearLayout>
 
             <LinearLayout

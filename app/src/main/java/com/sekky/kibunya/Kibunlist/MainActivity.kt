@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                                     putExtra("date", binding.todayText.text)
                                     putExtra("name", data.name)
                                     putExtra("kibun", data.kibun)
-                                    putExtra("time", Functions.getTimeString(data.time))
+                                    putExtra("time", data.time)
                                     putExtra("image", data.image)
                                     putExtra("userId", data.user_id)
                                     putExtra("documentId", data.documentId)

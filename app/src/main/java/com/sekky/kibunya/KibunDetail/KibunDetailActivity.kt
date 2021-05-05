@@ -45,10 +45,13 @@ class KibunDetailActivity: AppCompatActivity() {
     private var date: String? = ""
     private var name: String? = ""
     private var kibun: Int = 0
-    private var time: String? = ""
+    private var time: Timestamp? = null
     private var image: String? = ""
     private var userId: String? = ""
     private var documentId: String? = ""
+
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
 
     override fun onResume() {
         super.onResume()
@@ -57,7 +60,7 @@ class KibunDetailActivity: AppCompatActivity() {
         date = intent.getStringExtra("date")
         name = intent.getStringExtra("name")
         kibun = intent.getIntExtra("kibun", 0)
-        time = intent.getStringExtra("time")
+        time = intent.getParcelableExtra("time")
         image = intent.getStringExtra("image")
         userId = intent.getStringExtra("userId")
         documentId = intent.getStringExtra("documentId")
@@ -129,7 +132,7 @@ class KibunDetailActivity: AppCompatActivity() {
             4 -> binding.kibun.setImageResource(R.drawable.kibun_icon4)
         }
         // 時間
-        binding.time = time
+        binding.time = Functions.getTimeString(time!!)
         // 画像
         if (image != "") {
             binding.kibunImage.scaleX = 0.1f
@@ -154,7 +157,8 @@ class KibunDetailActivity: AppCompatActivity() {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        diaryImageReverse()
+                        binding.kibunImage.scaleX = 1f
+                        binding.kibunImage.scaleY = 1f
                         return false
                     }
 
@@ -185,11 +189,23 @@ class KibunDetailActivity: AppCompatActivity() {
         binding.leftButton.setOnClickListener {
             finish()
         }
-    }
 
-    fun diaryImageReverse() {
-        binding.kibunImage.scaleX = 1f
-        binding.kibunImage.scaleY = 1f
+        // 自分の日記なら編集可能にする
+        if (userId == user!!.uid) {
+            binding.editDiary.visibility = View.VISIBLE
+            binding.editDiary.setOnClickListener {
+                val intent =
+                    Intent(this@KibunDetailActivity, KibunInputActivity::class.java).apply {
+                        putExtra("isEditDiary", true)
+                        putExtra("diaryText", text)
+                        putExtra("kibunParam", kibun)
+                        putExtra("sendDiaryDateTime", time)
+                        putExtra("documentId", documentId)
+                        putExtra("imageUrl", image)
+                    }
+                startActivity(intent)
+            }
+        }
     }
 
     // コメント表示
@@ -223,8 +239,6 @@ class KibunDetailActivity: AppCompatActivity() {
 
         val documentId: String? = intent.getStringExtra("documentId")
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
         val familyRef = db.collection("families")
         val containsMyUidDocument = familyRef.whereArrayContains("user_id", user!!.uid)
         var familyId = ""
