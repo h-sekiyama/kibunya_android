@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -49,6 +50,8 @@ class KibunDetailActivity: AppCompatActivity() {
     private var image: String? = ""
     private var userId: String? = ""
     private var documentId: String? = ""
+
+    private var isGlideProhibited: Boolean = false
 
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
@@ -93,6 +96,12 @@ class KibunDetailActivity: AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        isGlideProhibited = true
+    }
+
     private fun configure() {
 
         // CloudStorageを使う準備
@@ -103,11 +112,17 @@ class KibunDetailActivity: AppCompatActivity() {
         binding.date = date
         // ユーザーアイコン
         imageRef.getBytes(1000000).addOnSuccessListener {
-            // 画像が存在すればそれを表示
-            Glide.with(applicationContext)
-                .load(imageRef)
-                .placeholder(R.drawable.noimage)
-                .into(binding.userImage)
+            if (!isGlideProhibited) {
+                // 画像が存在すればそれを表示
+                Glide.with(applicationContext)
+                    .load(imageRef)
+                    .placeholder(R.drawable.noimage)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE )
+                    .skipMemoryCache(true)
+                    .into(binding.userImage)
+            } else {
+                binding.userImage.setImageResource(R.drawable.noimage)
+            }
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
             binding.userImage.setImageResource(R.drawable.noimage)

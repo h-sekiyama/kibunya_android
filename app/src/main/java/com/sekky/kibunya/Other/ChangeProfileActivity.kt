@@ -1,18 +1,21 @@
 package com.sekky.kibunya.Other
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
-import com.canhub.cropper.CropImage
-import com.canhub.cropper.CropImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -25,12 +28,15 @@ import com.sekky.kibunya.Kibunlist.MainActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.Users
 import com.sekky.kibunya.databinding.ActivityChangeProfileBinding
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.activity_change_profile.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.*
 
 
 class ChangeProfileActivity: AppCompatActivity() {
@@ -62,6 +68,8 @@ class ChangeProfileActivity: AppCompatActivity() {
             Glide.with(this)
                 .load(imageRef)
                 .placeholder(R.drawable.noimage)
+                .diskCacheStrategy(DiskCacheStrategy.NONE )
+                .skipMemoryCache(true)
                 .into(binding.profileImage)
         }.addOnFailureListener {
             // 取得失敗したらデフォルト画像表示
@@ -96,23 +104,35 @@ class ChangeProfileActivity: AppCompatActivity() {
 
         init()
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(resultData)
-            if (resultData != null) {
-                if (resultCode == RESULT_OK) {
-                    Glide.with(this)
-                        .load(result?.uriContent)
-                        .into(binding.profileImage)
+        if (requestCode == 203){
+            if (resultCode != Activity.RESULT_OK){
+                return
+            }
 
-                    // 保存ボタンをアクティブにする
-                    binding.profileChangeButton.isEnabled = true
-                    binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
+            val tmpImage = resultData?.data!!
+            val tmpFileName = UUID.randomUUID().toString() + ".png"
+            File.createTempFile(tmpFileName, null, cacheDir)
+            val tmpFileUri = Uri.fromFile(File(cacheDir, tmpFileName))
 
-                    isChangedProfIcon = true
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val error = result?.error
-                    Functions.showAlertOneButton(this, "エラー", error.toString())
+            val options = com.yalantis.ucrop.UCrop.Options()
+            options.setToolbarTitle("切り抜き")
+            options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+            options.withAspectRatio(1F, 1F)
+            val uCrop = UCrop.of(tmpImage, tmpFileUri)
+            uCrop.withOptions(options)
+            uCrop.start(this)
+        } else if (requestCode == UCrop.REQUEST_CROP){
+            if (resultCode == Activity.RESULT_OK) {
+                val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(UCrop.getOutput(resultData!!)!!.encodedPath), binding.profileImage.width, binding.profileImage.height, true)
+                // 保存ボタンをアクティブにする
+                binding.profileChangeButton.isEnabled = true
+                binding.profileChangeButton.setBackgroundResource(R.drawable.shape_rounded_corners_enabled_30dp)
+                isChangedProfIcon = true
+                runOnUiThread {
+                    binding.profileImage.setImageBitmap(bitmap)
                 }
+            } else if (resultCode == UCrop.RESULT_ERROR){
+                Log.e("TAG", "uCropエラー: "+ UCrop.getError(resultData!!).toString())
             }
         }
     }
@@ -146,10 +166,9 @@ class ChangeProfileActivity: AppCompatActivity() {
         // ギャラリーから画像選択
         binding.profileImage.setOnClickListener {
             beforeName = binding.nameInput.text.toString()
-            CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .start(this)
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startActivityForResult(intent, 203)
         }
 
         // タブボタン処理

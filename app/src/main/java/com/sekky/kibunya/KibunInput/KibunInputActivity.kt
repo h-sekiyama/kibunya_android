@@ -1,17 +1,21 @@
 package com.sekky.kibunya.KibunInput
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -19,8 +23,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.canhub.cropper.CropImage
-import com.canhub.cropper.CropImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -35,8 +37,10 @@ import com.sekky.kibunya.Kibuns
 import com.sekky.kibunya.Other.OtherActivity
 import com.sekky.kibunya.R
 import com.sekky.kibunya.databinding.ActivityKibunInputBinding
+import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -92,19 +96,33 @@ class KibunInputActivity: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, resultData)
         init()
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(resultData)
-            if (resultData != null) {
-                if (resultCode == RESULT_OK) {
-                    Glide.with(this)
-                        .load(result?.uriContent)
-                        .into(binding.kibunImageSelect)
-                    diaryImageUri = result?.uriContent
-                    isExsistSendImage = true
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val error = result?.error
-                    Functions.showAlertOneButton(this, "エラー", error.toString())
+        if (requestCode == 203){
+            if (resultCode != Activity.RESULT_OK){
+                return
+            }
+
+            val tmpImage = resultData?.data!!
+            val tmpFileName = UUID.randomUUID().toString() + ".png"
+            File.createTempFile(tmpFileName, null, cacheDir)
+            val tmpFileUri = Uri.fromFile(File(cacheDir, tmpFileName))
+
+            val options = com.yalantis.ucrop.UCrop.Options()
+            options.setToolbarTitle("切り抜き")
+            options.setCompressionFormat(Bitmap.CompressFormat.PNG)
+            options.withAspectRatio(360F, 270F)
+            val uCrop = UCrop.of(tmpImage, tmpFileUri)
+            uCrop.withOptions(options)
+            uCrop.start(this)
+        } else if (requestCode == UCrop.REQUEST_CROP){
+            if (resultCode == Activity.RESULT_OK) {
+                val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(UCrop.getOutput(resultData!!)!!.encodedPath), binding.kibunImageSelect.width, binding.kibunImageSelect.height, true)
+                isExsistSendImage = true
+                diaryImageUri = UCrop.getOutput(resultData)!!
+                runOnUiThread {
+                    binding.kibunImageSelect.setImageBitmap(bitmap)
                 }
+            } else if (resultCode == UCrop.RESULT_ERROR){
+                Log.e("TAG", "uCropエラー: "+UCrop.getError(resultData!!).toString())
             }
         }
     }
@@ -244,10 +262,9 @@ class KibunInputActivity: AppCompatActivity() {
 
         // ギャラリーから画像選択
         binding.kibunImageSelect.setOnClickListener {
-            CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(360, 270)
-                .start(this)
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startActivityForResult(intent, 203)
         }
 
         // 日記を書くボタンの有効/無効切り替え
