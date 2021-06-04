@@ -53,8 +53,6 @@ class KibunsAdapter(
                 Glide.with(context!!)
                     .load(imageRef)
                     .placeholder(R.drawable.noimage)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE )
-                    .skipMemoryCache(true)
                     .into(holder.binding.userIcon)
             }.addOnFailureListener {
                 // 取得失敗したらデフォルト画像表示

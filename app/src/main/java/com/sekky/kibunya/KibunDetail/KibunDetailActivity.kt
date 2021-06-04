@@ -118,8 +118,6 @@ class KibunDetailActivity: AppCompatActivity() {
                 Glide.with(applicationContext)
                     .load(imageRef)
                     .placeholder(R.drawable.noimage)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE )
-                    .skipMemoryCache(true)
                     .into(binding.userImage)
             } else {
                 binding.userImage.setImageResource(R.drawable.noimage)

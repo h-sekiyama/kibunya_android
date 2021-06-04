@@ -36,6 +36,7 @@ import hotchemi.android.rate.AppRate
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import org.json.JSONArray
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -157,10 +158,14 @@ class MainActivity : AppCompatActivity() {
                 if (resultMap.documents.size != 0 && FirebaseAuth.getInstance().currentUser != null) {
                     // 家族登録状況を元にニフクラにfamilyIdを登録
                     familyId = resultMap.documents[0].id
-                    val installation = NCMBInstallation.getCurrentInstallation()
-                    installation.deviceToken = deviceToken
-                    installation.channels = JSONArray("[${familyId}]")
-                    installation.saveInBackground()
+                    try {
+                        val installation = NCMBInstallation.getCurrentInstallation()
+                        installation.deviceToken = deviceToken
+                        installation.channels = JSONArray("[${familyId}]")
+                        installation.saveInBackground()
+                    } catch (e: Exception) {
+                        return@addSnapshotListener
+                    }
                 }
                 val results = resultsMap?.toObjects(Kibuns::class.java)
                     ?.sortedByDescending { kibuns -> kibuns.time } ?: return@addSnapshotListener
