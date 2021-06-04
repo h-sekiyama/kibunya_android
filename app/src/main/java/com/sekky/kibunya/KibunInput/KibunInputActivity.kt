@@ -15,7 +15,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
@@ -23,10 +22,12 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.nifcloud.mbaas.core.NCMBInstallation
 import com.nifcloud.mbaas.core.NCMBPush
@@ -41,7 +42,6 @@ import com.yalantis.ucrop.UCrop
 import kotlinx.android.synthetic.main.tab_layout.view.*
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -365,27 +365,35 @@ class KibunInputActivity: AppCompatActivity() {
                     // i/A共通の設定
                     push.message = "${user.displayName}が日記を書きました"
 
-                    // 送る対象を家族に限定
-                    val installation = NCMBInstallation.getCurrentInstallation()
-                    val query = NCMBQuery<NCMBInstallation>("installation")
-                    query.whereContainedIn("channels", listOf(familyId))
-                    query.whereNotEqualTo("deviceToken", installation.deviceToken) // 自分は除く
-                    push.setSearchCondition(query)
-
-                    // iOS用の設定
-                    push.badgeIncrementFlag = false
-                    push.badgeSetting = 1
-                    push.sound = "default"
-                    push.category = "CATEGORY001"
-                    // Android用の設定
-                    push.action = "com.sample.pushsample.RECEIVE_PUSH"
-                    push.title = "家族ダイアリー"
-                    push.dialog = true
-                    push.sendInBackground { e ->
-                        if (e != null) {
-                            // エラー処理
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            return@OnCompleteListener
                         }
-                    }
+
+                        // Get new FCM registration token
+                        val deviceToken = task.result
+
+                        // 送る対象を家族に限定
+                        val query = NCMBQuery<NCMBInstallation>("installation")
+                        query.whereContainedIn("channels", listOf(familyId))
+                        query.whereNotEqualTo("deviceToken", deviceToken) // 自分は除く
+                        push.setSearchCondition(query)
+
+                        // iOS用の設定
+                        push.badgeIncrementFlag = false
+                        push.badgeSetting = 1
+                        push.sound = "default"
+                        push.category = "CATEGORY001"
+                        // Android用の設定
+                        push.action = "com.sample.pushsample.RECEIVE_PUSH"
+                        push.title = "家族ダイアリー"
+                        push.dialog = true
+                        push.sendInBackground { e ->
+                            if (e != null) {
+                                // エラー処理
+                            }
+                        }
+                    })
                 }
             }
         }.addOnFailureListener {

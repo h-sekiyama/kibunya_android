@@ -17,7 +17,6 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nifcloud.mbaas.core.NCMB
-import com.nifcloud.mbaas.core.NCMBInstallation
 import com.sekky.kibunya.BuildConfig
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.Kibunlist.MainActivity

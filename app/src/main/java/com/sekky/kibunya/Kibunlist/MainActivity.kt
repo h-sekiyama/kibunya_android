@@ -18,9 +18,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.nifcloud.mbaas.core.*
 import com.sekky.kibunya.Common.Functions
 import com.sekky.kibunya.KibunDetail.KibunDetailActivity
@@ -44,8 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     // 日記を表示している日付（Date型）
     private var showDiaryDate: Date = Date()
-
-    private var installation = NCMBInstallation.getCurrentInstallation()
+    private var deviceToken = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,21 +67,27 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         } else {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    return@OnCompleteListener
+                }
 
-            // ニフクラに登録するdeviceTokenをPreferenceに保存しておく
-            installation = NCMBInstallation.getCurrentInstallation()
-            val dataStore: SharedPreferences =
-                getSharedPreferences("DataStore", Context.MODE_PRIVATE)
-            val editor = dataStore.edit()
-            editor.putString(getString(R.string.device_Token_key), installation.deviceToken)
-            editor.apply()
+                // Get new FCM registration token
+                deviceToken = task.result
 
-            // カレンダー非表示
-            binding.popupLayout.visibility = View.INVISIBLE
-            binding.overlay.visibility = View.INVISIBLE
-            binding.calendarView.visibility = View.INVISIBLE
+                val dataStore: SharedPreferences =
+                    getSharedPreferences("DataStore", Context.MODE_PRIVATE)
+                val editor = dataStore.edit()
+                editor.putString(getString(R.string.device_Token_key), deviceToken)
+                editor.apply()
 
-            init()
+                // カレンダー非表示
+                binding.popupLayout.visibility = View.INVISIBLE
+                binding.overlay.visibility = View.INVISIBLE
+                binding.calendarView.visibility = View.INVISIBLE
+
+                init()
+                })
         }
     }
 
@@ -147,9 +154,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             db.collection("kibuns").whereIn("user_id", familyList).whereEqualTo("date", SimpleDateFormat("YYYY年MM月dd日").format(showDiaryDate)).addSnapshotListener { resultsMap, exception ->
-                if (resultMap.documents.size != 0) {
+                if (resultMap.documents.size != 0 && FirebaseAuth.getInstance().currentUser != null) {
                     // 家族登録状況を元にニフクラにfamilyIdを登録
                     familyId = resultMap.documents[0].id
+                    val installation = NCMBInstallation.getCurrentInstallation()
+                    installation.deviceToken = deviceToken
                     installation.channels = JSONArray("[${familyId}]")
                     installation.saveInBackground()
                 }
